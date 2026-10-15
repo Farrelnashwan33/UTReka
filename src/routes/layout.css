@@ -1,0 +1,79 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ut-yellow: #FFD43B;
+  --color-ut-yellow-hover: #F2C41D;
+  --color-ut-warm: #FAF9F6;
+  --color-ut-navy: #183153;
+  --color-ut-navy-dark: #0F1F35;
+  --color-ut-navy-light: #24446F;
+  --color-ut-dark: #202124;
+  --color-ut-muted: #5F6368;
+  --color-ut-lightblue: #EAF4FF;
+  --color-ut-green: #18866B;
+  --color-ut-green-light: #E7F6F1;
+  --color-ut-border: #E7E5E0;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  --font-serif: 'Lora', Georgia, Cambria, 'Times New Roman', serif;
+}
+
+:root {
+  --ut-yellow: #FFD43B;
+  --ut-navy: #183153;
+  --ut-warm: #FAF9F6;
+  --ut-dark: #202124;
+  --ut-border: #E7E5E0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--ut-warm);
+  color: var(--ut-dark);
+}
+
+h1, h2, h3, h4, .font-heading {
+  font-family: var(--font-heading);
+}
+
+/* Glass & Card styles */
+.ut-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--ut-border);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(24, 49, 83, 0.04), 0 1px 2px -1px rgba(24, 49, 83, 0.02);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ut-card-hover:hover {
+  border-color: #D3CEBE;
+  box-shadow: 0 10px 25px -5px rgba(24, 49, 83, 0.08), 0 8px 10px -6px rgba(24, 49, 83, 0.04);
+  transform: translateY(-2px);
+}
+
+.ut-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(231, 229, 224, 0.8);
+}
+
+.ut-glass-navy {
+  background: rgba(24, 49, 83, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Accessibility: respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-delay: -1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    background-attachment: initial !important;
+    scroll-behavior: auto !important;
+    transition-delay: 0s !important;
+    transition-duration: 0s !important;
+  }
+}
