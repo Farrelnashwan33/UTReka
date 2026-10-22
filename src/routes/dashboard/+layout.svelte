@@ -18,16 +18,16 @@
   });
 </script>
 
-<div class="min-h-screen bg-[#FAF9F6] flex flex-col md:flex-row antialiased selection:bg-[#FFD43B] selection:text-[#183153]">
-  <!-- Desktop Sidebar: Yellow background matching screenshot -->
+<div class="min-h-screen bg-[#F7F6F2] flex flex-col md:flex-row antialiased selection:bg-[#3157D5] selection:text-white">
+  <!-- Desktop Sidebar: Midnight Navy -->
   <DashboardSidebar bind:isOpen={isSidebarOpen} />
 
   <!-- Main App Shell -->
-  <div class="flex-1 md:pl-64 lg:pl-68 flex flex-col min-w-0 min-h-screen">
+  <div class="flex-1 md:pl-64 lg:pl-70 flex flex-col min-w-0 min-h-screen">
     <!-- Top Bar with breadcrumbs and user controls -->
     <DashboardTopbar onToggleSidebar={() => isSidebarOpen = !isSidebarOpen} />
 
-    <!-- Centered Responsive Container matching the design reference layout -->
+    <!-- Centered Responsive Container -->
     <main class="flex-1 p-3.5 sm:p-5 md:p-6 lg:p-8 max-w-7xl w-full mx-auto pb-24 md:pb-8">
       {@render children()}
     </main>

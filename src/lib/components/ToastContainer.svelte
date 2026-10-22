@@ -6,22 +6,22 @@
 <div class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-md w-full pointer-events-none p-4" aria-live="assertive">
   {#each toastStore.items as toast (toast.id)}
     <div 
-      class="pointer-events-auto flex items-start gap-3 p-4 rounded-xl shadow-lg border text-sm transition-all duration-300 transform translate-y-0
-        {toast.type === 'success' ? 'bg-[#FAF9F6] border-[#18866B] text-[#183153]' : ''}
-        {toast.type === 'error' ? 'bg-[#FAF9F6] border-red-500 text-red-900' : ''}
-        {toast.type === 'warning' ? 'bg-[#FAF9F6] border-amber-500 text-amber-900' : ''}
-        {toast.type === 'info' ? 'bg-[#FAF9F6] border-[#183153] text-[#183153]' : ''}"
+      class="pointer-events-auto flex items-start gap-3 p-4 rounded-2xl shadow-xl border text-sm transition-all duration-300 transform translate-y-0
+        {toast.type === 'success' ? 'bg-white border-emerald-500/30 text-[#101B35]' : ''}
+        {toast.type === 'error' ? 'bg-white border-red-500/30 text-red-900' : ''}
+        {toast.type === 'warning' ? 'bg-white border-amber-500/30 text-amber-900' : ''}
+        {toast.type === 'info' ? 'bg-white border-[#3157D5]/30 text-[#101B35]' : ''}"
       role="alert"
     >
       <div class="shrink-0 mt-0.5">
         {#if toast.type === 'success'}
-          <CheckCircle2 class="w-5 h-5 text-[#18866B]" />
+          <CheckCircle2 class="w-5 h-5 text-emerald-600" />
         {:else if toast.type === 'error'}
           <AlertCircle class="w-5 h-5 text-red-600" />
         {:else if toast.type === 'warning'}
           <AlertTriangle class="w-5 h-5 text-amber-600" />
         {:else}
-          <Info class="w-5 h-5 text-[#183153]" />
+          <Info class="w-5 h-5 text-[#3157D5]" />
         {/if}
       </div>
 
@@ -31,7 +31,7 @@
 
       <button
         onclick={() => toastStore.remove(toast.id)}
-        class="text-gray-400 hover:text-gray-700 transition p-1"
+        class="text-[#68738A] hover:text-[#101B35] transition p-1"
         aria-label="Tutup notifikasi"
       >
         <X class="w-4 h-4" />

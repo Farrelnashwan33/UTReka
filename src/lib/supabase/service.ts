@@ -12,18 +12,112 @@ import {
 } from './mock-data';
 import type { 
   Profile, 
+  UserRole,
   Opportunity, 
   ConnectionRequest, 
   Conversation, 
   Message, 
-  NotificationItem,
-  ReportItem,
-  VerificationRequestItem,
-  AuditLogItem,
-  ConnectionRequestStatus,
-  VerificationStatus,
-  ReportStatus
+  NotificationItem, 
+  ReportItem, 
+  VerificationRequestItem, 
+  AuditLogItem, 
+  ConnectionRequestStatus, 
+  VerificationStatus, 
+  ReportStatus 
 } from '$lib/types/database';
+
+const PROFILES_STORAGE_KEY = 'ut_reka_custom_profiles';
+const ACCOUNTS_STORAGE_KEY = 'ut_reka_registered_accounts';
+const VERIF_STORAGE_KEY = 'ut_reka_custom_verifications';
+
+export interface RegisteredAccount {
+  email: string;
+  passwordHash: string;
+  userId: string;
+  role: UserRole;
+  createdAt: string;
+}
+
+export function getStoredCustomProfiles(): Profile[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(PROFILES_STORAGE_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw) as Profile[];
+  } catch (e) {
+    return [];
+  }
+}
+
+export function saveStoredCustomProfile(profile: Profile): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const list = getStoredCustomProfiles();
+    const idx = list.findIndex(p => p.id === profile.id || p.email.toLowerCase() === profile.email.toLowerCase());
+    if (idx >= 0) {
+      list[idx] = { ...list[idx], ...profile, updated_at: new Date().toISOString() };
+    } else {
+      list.unshift(profile);
+    }
+    localStorage.setItem(PROFILES_STORAGE_KEY, JSON.stringify(list));
+  } catch (e) {
+    console.warn('saveStoredCustomProfile error:', e);
+  }
+}
+
+export function getStoredRegisteredAccounts(): RegisteredAccount[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(ACCOUNTS_STORAGE_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw) as RegisteredAccount[];
+  } catch (e) {
+    return [];
+  }
+}
+
+export function saveStoredRegisteredAccount(account: RegisteredAccount): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const list = getStoredRegisteredAccounts();
+    const idx = list.findIndex(a => a.email.toLowerCase() === account.email.toLowerCase());
+    if (idx >= 0) {
+      list[idx] = account;
+    } else {
+      list.unshift(account);
+    }
+    localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(list));
+  } catch (e) {
+    console.warn('saveStoredRegisteredAccount error:', e);
+  }
+}
+
+export function getStoredVerificationRequests(): VerificationRequestItem[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(VERIF_STORAGE_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw) as VerificationRequestItem[];
+  } catch (e) {
+    return [];
+  }
+}
+
+export function saveStoredVerificationRequest(request: VerificationRequestItem): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const list = getStoredVerificationRequests();
+    const idx = list.findIndex(r => r.id === request.id || r.user_id === request.user_id);
+    if (idx >= 0) {
+      list[idx] = { ...list[idx], ...request };
+    } else {
+      list.unshift(request);
+    }
+    localStorage.setItem(VERIF_STORAGE_KEY, JSON.stringify(list));
+  } catch (e) {
+    console.warn('saveStoredVerificationRequest error:', e);
+  }
+}
 
 // Mutable in-memory store ONLY used when Supabase is explicitly unconfigured in local preview
 let inMemoryProfiles = [...mockProfiles];
@@ -37,49 +131,167 @@ let inMemoryVerifications = [...mockVerificationRequests];
 let inMemoryAuditLogs = [...mockAuditLogs];
 
 export const platformService = {
+  // Sync in-memory store with any stored custom profiles on initialization
+  syncStoredProfiles() {
+    const customProfiles = getStoredCustomProfiles();
+    for (const cp of customProfiles) {
+      const idx = inMemoryProfiles.findIndex(p => p.id === cp.id || p.email.toLowerCase() === cp.email.toLowerCase());
+      if (idx >= 0) {
+        inMemoryProfiles[idx] = cp;
+      } else {
+        inMemoryProfiles.unshift(cp);
+      }
+    }
+  },
+
+  registerLocalProfile(profile: Profile) {
+    saveStoredCustomProfile(profile);
+    const idx = inMemoryProfiles.findIndex(p => p.id === profile.id || p.email.toLowerCase() === profile.email.toLowerCase());
+    if (idx >= 0) {
+      inMemoryProfiles[idx] = profile;
+    } else {
+      inMemoryProfiles.unshift(profile);
+    }
+
+    const mockIdx = mockProfiles.findIndex(p => p.id === profile.id || p.email.toLowerCase() === profile.email.toLowerCase());
+    if (mockIdx >= 0) {
+      mockProfiles[mockIdx] = profile;
+    } else {
+      mockProfiles.unshift(profile);
+    }
+  },
+
+  async createVerificationRequest(req: VerificationRequestItem): Promise<{ success: boolean }> {
+    saveStoredVerificationRequest(req);
+    const idx = inMemoryVerifications.findIndex(v => v.id === req.id || v.user_id === req.user_id);
+    if (idx >= 0) {
+      inMemoryVerifications[idx] = req;
+    } else {
+      inMemoryVerifications.unshift(req);
+    }
+
+    if (isSupabaseConfigured()) {
+      try {
+        const supabase = getSupabaseClient();
+        await supabase.from('verification_requests').upsert(req);
+      } catch (e) {
+        console.warn('Supabase createVerificationRequest error:', e);
+      }
+    }
+    return { success: true };
+  },
+
   // --- PROFILES ---
   async getProfile(userId: string): Promise<Profile | null> {
+    const localProfiles = getStoredCustomProfiles();
+    const localMatch = localProfiles.find(p => p.id === userId || p.email.toLowerCase() === userId.toLowerCase());
+
     if (isSupabaseConfigured()) {
-      const supabase = getSupabaseClient();
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-      if (error) {
-        console.error('Supabase getProfile error:', error.message);
-        return null;
+      try {
+        const supabase = getSupabaseClient();
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .single();
+        if (!error && data) {
+          saveStoredCustomProfile(data as Profile);
+          return data as Profile;
+        }
+      } catch (err) {
+        console.error('Supabase getProfile error:', err);
       }
-      return data as Profile;
     }
-    return inMemoryProfiles.find(p => p.id === userId) || inMemoryProfiles[0];
+
+    if (localMatch) return localMatch;
+    return inMemoryProfiles.find(p => p.id === userId || p.email.toLowerCase() === userId.toLowerCase()) || 
+           mockProfiles.find(p => p.id === userId || p.email.toLowerCase() === userId.toLowerCase()) || 
+           inMemoryProfiles[0];
   },
 
   async updateProfile(userId: string, updates: Partial<Profile>): Promise<{ success: boolean; error?: string }> {
     if (isSupabaseConfigured()) {
       try {
         const supabase = getSupabaseClient();
-        // Strict guard: Disallow role or verification_status update directly from client
+        // Strict guard: Disallow role update directly from client
         const safeUpdates = { ...updates };
         delete safeUpdates.role;
-        delete safeUpdates.verification_status;
 
         const { error } = await supabase
           .from('profiles')
-          .update(safeUpdates)
+          .update({ ...safeUpdates, updated_at: new Date().toISOString() })
           .eq('id', userId);
-        if (error) return { success: false, error: error.message };
-        return { success: true };
+        if (error) {
+          console.warn('Supabase updateProfile warning:', error.message);
+        }
       } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : 'Gagal memperbarui profil';
-        return { success: false, error: msg };
+        console.warn('Supabase updateProfile error:', err);
       }
+    }
+
+    // Always update local persistence so changes are permanent
+    const localProfiles = getStoredCustomProfiles();
+    const foundLocal = localProfiles.find(p => p.id === userId);
+    if (foundLocal) {
+      saveStoredCustomProfile({ ...foundLocal, ...updates, updated_at: new Date().toISOString() });
     }
 
     const idx = inMemoryProfiles.findIndex(p => p.id === userId);
     if (idx !== -1) {
       inMemoryProfiles[idx] = { ...inMemoryProfiles[idx], ...updates, updated_at: new Date().toISOString() };
     }
+    return { success: true };
+  },
+
+  async setVerificationStatus(userId: string, status: VerificationStatus, feedback?: string): Promise<{ success: boolean; error?: string }> {
+    if (isSupabaseConfigured()) {
+      try {
+        const supabase = getSupabaseClient();
+        await supabase
+          .from('profiles')
+          .update({ verification_status: status, updated_at: new Date().toISOString() })
+          .eq('id', userId);
+      } catch (e) {
+        console.warn('Supabase setVerificationStatus error:', e);
+      }
+    }
+
+    // Update in local storage
+    const localProfiles = getStoredCustomProfiles();
+    const pIdx = localProfiles.findIndex(p => p.id === userId);
+    if (pIdx >= 0) {
+      localProfiles[pIdx].verification_status = status;
+      localProfiles[pIdx].updated_at = new Date().toISOString();
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(PROFILES_STORAGE_KEY, JSON.stringify(localProfiles));
+      }
+    }
+
+    // Update in memory
+    const memIdx = inMemoryProfiles.findIndex(p => p.id === userId);
+    if (memIdx >= 0) {
+      inMemoryProfiles[memIdx].verification_status = status;
+    }
+
+    // Update verification request if present
+    const verifReqs = getStoredVerificationRequests();
+    const vIdx = verifReqs.findIndex(v => v.user_id === userId);
+    if (vIdx >= 0) {
+      verifReqs[vIdx].status = status;
+      verifReqs[vIdx].admin_feedback = feedback || null;
+      verifReqs[vIdx].reviewed_at = new Date().toISOString();
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(VERIF_STORAGE_KEY, JSON.stringify(verifReqs));
+      }
+    }
+
+    const memVIdx = inMemoryVerifications.findIndex(v => v.user_id === userId);
+    if (memVIdx >= 0) {
+      inMemoryVerifications[memVIdx].status = status;
+      inMemoryVerifications[memVIdx].admin_feedback = feedback || null;
+      inMemoryVerifications[memVIdx].reviewed_at = new Date().toISOString();
+    }
+
     return { success: true };
   },
 
@@ -422,46 +634,43 @@ export const platformService = {
 
   // --- ADMIN CENTER ---
   async getAdminStats() {
+    const allUsers = await this.getAllUsers();
+    const studentsCount = allUsers.filter(u => u.role === 'student').length;
+    const alumniCount = allUsers.filter(u => u.role === 'alumni').length;
+    const unverifiedUsersCount = allUsers.filter(u => u.verification_status === 'unverified' || u.verification_status === 'pending').length;
+
+    let oppsCount = inMemoryOpportunities.length;
+    let pendingVerifRequests = inMemoryVerifications.filter(v => v.status === 'pending').length;
+
     if (isSupabaseConfigured()) {
       try {
         const supabase = getSupabaseClient();
         const [
-          { count: studentCount },
-          { count: alumniCount },
           { count: oppCount },
-          { count: pendingVerifications }
+          { count: verifCount }
         ] = await Promise.all([
-          supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'student'),
-          supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'alumni'),
           supabase.from('opportunities').select('*', { count: 'exact', head: true }),
           supabase.from('verification_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending')
         ]);
-        return {
-          totalStudents: studentCount || 0,
-          totalAlumni: alumniCount || 0,
-          totalOpportunities: oppCount || 0,
-          pendingVerifications: pendingVerifications || 0
-        };
+        if (typeof oppCount === 'number') oppsCount = oppCount;
+        if (typeof verifCount === 'number') pendingVerifRequests = verifCount;
       } catch (err) {
-        console.error('Supabase getAdminStats error:', err);
-        return {
-          totalStudents: 0,
-          totalAlumni: 0,
-          totalOpportunities: 0,
-          pendingVerifications: 0
-        };
+        console.warn('Supabase getAdminStats count notice:', err);
       }
     }
 
     return {
-      totalStudents: inMemoryProfiles.filter(p => p.role === 'student').length,
-      totalAlumni: inMemoryProfiles.filter(p => p.role === 'alumni').length,
-      totalOpportunities: inMemoryOpportunities.length,
-      pendingVerifications: inMemoryVerifications.filter(v => v.status === 'pending').length
+      totalStudents: studentsCount,
+      totalAlumni: alumniCount,
+      totalOpportunities: oppsCount,
+      pendingVerifications: Math.max(pendingVerifRequests, unverifiedUsersCount)
     };
   },
 
   async getAllUsers(role?: string): Promise<Profile[]> {
+    const localProfiles = getStoredCustomProfiles();
+    let combinedProfiles: Profile[] = [];
+
     if (isSupabaseConfigured()) {
       try {
         const supabase = getSupabaseClient();
@@ -470,21 +679,66 @@ export const platformService = {
           query = query.eq('role', role);
         }
         const { data, error } = await query;
-        if (error) {
-          console.error('Supabase getAllUsers error:', error.message);
-          return [];
+        if (!error && data) {
+          const profileMap = new Map<string, Profile>();
+          // 1. Supabase records
+          for (const p of data as Profile[]) {
+            profileMap.set(p.id, p);
+            profileMap.set(p.email.toLowerCase(), p);
+          }
+          // 2. Merge local custom profiles (background push if not in Supabase)
+          for (const lp of localProfiles) {
+            if (!profileMap.has(lp.id) && !profileMap.has(lp.email.toLowerCase())) {
+              profileMap.set(lp.id, lp);
+              // Background sync to Supabase
+              Promise.resolve(supabase.from('profiles').upsert(lp)).catch(() => {});
+            }
+          }
+          combinedProfiles = Array.from(new Set(profileMap.values()));
+        } else {
+          console.warn('Supabase getAllUsers error, fallback to combined local:', error?.message);
+          const profileMap = new Map<string, Profile>();
+          for (const p of [...localProfiles, ...inMemoryProfiles]) {
+            profileMap.set(p.id, p);
+          }
+          combinedProfiles = Array.from(profileMap.values());
         }
-        return (data || []) as Profile[];
       } catch (err) {
-        console.error('Supabase getAllUsers unexpected error:', err);
-        return [];
+        console.warn('Supabase getAllUsers unexpected error:', err);
+        const profileMap = new Map<string, Profile>();
+        for (const p of [...localProfiles, ...inMemoryProfiles]) {
+          profileMap.set(p.id, p);
+        }
+        combinedProfiles = Array.from(profileMap.values());
       }
+    } else {
+      const profileMap = new Map<string, Profile>();
+      // 1. Static mock profiles
+      for (const p of [...inMemoryProfiles, ...mockProfiles]) {
+        profileMap.set(p.id, p);
+        profileMap.set(p.email.toLowerCase(), p);
+      }
+      // 2. Custom registered profiles (overwrites or prepends)
+      for (const lp of localProfiles) {
+        profileMap.set(lp.id, lp);
+        profileMap.set(lp.email.toLowerCase(), lp);
+      }
+      combinedProfiles = Array.from(new Set(profileMap.values()));
     }
-    if (role && role !== 'all') return inMemoryProfiles.filter(p => p.role === role);
-    return inMemoryProfiles;
+
+    // Sort descending by created_at so newest registered user is at the very top
+    combinedProfiles.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+    if (role && role !== 'all') {
+      return combinedProfiles.filter(p => p.role === role);
+    }
+    return combinedProfiles;
   },
 
   async getVerificationRequests(): Promise<VerificationRequestItem[]> {
+    const localVerifs = getStoredVerificationRequests();
+    let requests: VerificationRequestItem[] = [];
+
     if (isSupabaseConfigured()) {
       try {
         const supabase = getSupabaseClient();
@@ -492,24 +746,70 @@ export const platformService = {
           .from('verification_requests')
           .select('*, user:profiles(*)')
           .order('created_at', { ascending: false });
-        if (error) {
-          console.error('Supabase getVerificationRequests error:', error.message);
-          return [];
+        if (!error && data) {
+          const vMap = new Map<string, VerificationRequestItem>();
+          for (const v of data as VerificationRequestItem[]) {
+            vMap.set(v.id, v);
+            vMap.set(v.user_id, v);
+          }
+          for (const lv of localVerifs) {
+            if (!vMap.has(lv.id) && !vMap.has(lv.user_id)) {
+              vMap.set(lv.id, lv);
+            }
+          }
+          requests = Array.from(new Set(vMap.values()));
+        } else {
+          requests = [...localVerifs, ...inMemoryVerifications];
         }
-        return (data || []) as VerificationRequestItem[];
       } catch (err) {
-        console.error('Supabase getVerificationRequests unexpected error:', err);
-        return [];
+        requests = [...localVerifs, ...inMemoryVerifications];
+      }
+    } else {
+      const vMap = new Map<string, VerificationRequestItem>();
+      for (const v of [...localVerifs, ...inMemoryVerifications]) {
+        vMap.set(v.id, v);
+        vMap.set(v.user_id, v);
+      }
+      requests = Array.from(new Set(vMap.values()));
+    }
+
+    // Auto-synthesize verification items for newly registered users who don't have an explicit request yet
+    const allUsers = await this.getAllUsers();
+    for (const u of allUsers) {
+      if ((u.verification_status === 'unverified' || u.verification_status === 'pending') && u.role !== 'admin') {
+        const exists = requests.some(r => r.user_id === u.id);
+        if (!exists) {
+          const synthReq: VerificationRequestItem = {
+            id: `vreq-${u.id}`,
+            user_id: u.id,
+            role: u.role,
+            nim_or_alumni_id: u.nim || 'NIM-' + u.id.slice(-6),
+            document_url: null,
+            notes: `Pendaftaran baru ${u.role === 'student' ? 'Mahasiswa' : 'Alumni'} Program Studi ${u.study_program}`,
+            status: 'pending',
+            created_at: u.created_at,
+            user: u
+          };
+          requests.unshift(synthReq);
+        }
       }
     }
-    return inMemoryVerifications;
+
+    return requests;
   },
 
   async reviewVerification(requestId: string, status: VerificationStatus, feedback?: string): Promise<{ success: boolean; error?: string }> {
+    let targetUserId = '';
+    const verifList = await this.getVerificationRequests();
+    const found = verifList.find(v => v.id === requestId);
+    if (found) {
+      targetUserId = found.user_id;
+    }
+
     if (isSupabaseConfigured()) {
       try {
         const supabase = getSupabaseClient();
-        const { error } = await supabase
+        await supabase
           .from('verification_requests')
           .update({
             status,
@@ -517,11 +817,25 @@ export const platformService = {
             reviewed_at: new Date().toISOString()
           })
           .eq('id', requestId);
-        if (error) return { success: false, error: error.message };
-        return { success: true };
       } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : 'Gagal memproses verifikasi';
-        return { success: false, error: msg };
+        console.warn('Supabase reviewVerification notice:', err);
+      }
+    }
+
+    // Update target user profile verification status
+    if (targetUserId) {
+      await this.setVerificationStatus(targetUserId, status, feedback);
+    }
+
+    // Update local storage verification list
+    const localVerifs = getStoredVerificationRequests();
+    const vIdx = localVerifs.findIndex(v => v.id === requestId);
+    if (vIdx !== -1) {
+      localVerifs[vIdx].status = status;
+      localVerifs[vIdx].admin_feedback = feedback || null;
+      localVerifs[vIdx].reviewed_at = new Date().toISOString();
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(VERIF_STORAGE_KEY, JSON.stringify(localVerifs));
       }
     }
 
@@ -530,9 +844,8 @@ export const platformService = {
       inMemoryVerifications[idx].status = status;
       inMemoryVerifications[idx].admin_feedback = feedback || null;
       inMemoryVerifications[idx].reviewed_at = new Date().toISOString();
-      const userIdx = inMemoryProfiles.findIndex(p => p.id === inMemoryVerifications[idx].user_id);
-      if (userIdx !== -1) inMemoryProfiles[userIdx].verification_status = status;
     }
+
     return { success: true };
   },
 

@@ -26,10 +26,10 @@
   });
 </script>
 
-<div class="min-h-screen flex items-center justify-center p-6 bg-[#FAF9F6]">
+<div class="min-h-screen flex items-center justify-center p-6 bg-[#F7F6F2]">
   <div class="text-center space-y-3">
-    <div class="w-12 h-12 border-4 border-[#FFD43B] border-t-[#183153] rounded-full animate-spin mx-auto"></div>
-    <h2 class="text-lg font-bold text-[#183153]">Memverifikasi Sesi Masuk...</h2>
-    <p class="text-xs text-gray-500">Mohon tunggu sebentar, kami sedang mengarahkan Anda ke dashboard.</p>
+    <div class="w-12 h-12 border-4 border-[#EEF2FF] border-t-[#3157D5] rounded-full animate-spin mx-auto"></div>
+    <h2 class="text-lg font-bold text-[#101B35]">Memverifikasi Sesi Masuk...</h2>
+    <p class="text-xs text-[#68738A]">Mohon tunggu sebentar, kami sedang mengarahkan Anda ke dashboard.</p>
   </div>
 </div>

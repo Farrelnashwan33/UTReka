@@ -134,7 +134,6 @@
       isCreateModalOpen = false;
       newTitle = '';
       newDesc = '';
-      // Refresh opportunities list
       const opps = await platformService.getOpportunities();
       myOpportunities = opps.filter(o => o.author_id === authStore.profile?.id);
     } else {
@@ -149,13 +148,14 @@
 
 <div class="space-y-6 w-full">
   <!-- 1. Header Banner Portal Alumni -->
-  <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#18866B] via-[#10624e] to-[#183153] p-5 sm:p-6 lg:p-7 text-white shadow-md border border-[#18866B]/30">
-    <div class="absolute -right-8 -bottom-8 w-56 h-56 bg-[#FFD43B]/15 rounded-full blur-2xl pointer-events-none"></div>
+  <div class="relative overflow-hidden rounded-3xl bg-[#101B35] p-6 sm:p-7 text-white shadow-sm border border-[#101B35]/30">
+    <div class="absolute -right-8 -bottom-8 w-64 h-64 bg-[#3157D5]/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-0 right-1/4 w-40 h-40 bg-[#FFC83D]/10 rounded-full blur-2xl pointer-events-none"></div>
 
-    <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div class="space-y-2">
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[11px] font-bold text-white uppercase tracking-wider">
-          <HeartHandshake class="w-3.5 h-3.5 text-[#FFD43B]" />
+    <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+      <div class="space-y-2.5">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-bold text-white uppercase tracking-wider">
+          <HeartHandshake class="w-3.5 h-3.5 text-[#FFC83D]" />
           <span>Jaringan Alumni & Mentor UT</span>
         </div>
 
@@ -163,20 +163,20 @@
           <h1 class="text-xl sm:text-2xl font-black tracking-tight font-heading text-white">
             Selamat Datang, {authStore.profile?.full_name || 'Alumni UT'} 👋
           </h1>
-          <p class="text-xs sm:text-sm text-emerald-100 mt-1">
+          <p class="text-xs sm:text-sm text-gray-300 mt-1">
             {authStore.profile?.job_title || 'Profesional'} {authStore.profile?.company ? `@ ${authStore.profile?.company}` : ''} • Alumni {authStore.profile?.study_program || 'Universitas Terbuka'}
           </p>
         </div>
 
         <!-- Quick Info Badges -->
         <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px]">
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white/10 text-emerald-200 border border-white/15 font-medium">
-            <ShieldCheck class="w-3.5 h-3.5 text-[#FFD43B]" />
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-white/10 text-white border border-white/15 font-medium">
+            <ShieldCheck class="w-3.5 h-3.5 text-[#FFC83D]" />
             Mentor Terverifikasi
           </span>
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white/10 text-white border border-white/15 font-medium">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-white/10 text-white border border-white/15 font-medium">
             <span class="w-2 h-2 rounded-full {isMentorAvailable ? 'bg-emerald-400' : 'bg-gray-400'}"></span>
-            {isMentorAvailable ? 'Status: Tersedia Menerima Mahasiswa' : 'Status: Istirahat'}
+            {isMentorAvailable ? 'Status: Tersedia Membimbing Mahasiswa' : 'Status: Sedang Istirahat'}
           </span>
         </div>
       </div>
@@ -186,19 +186,19 @@
         <button 
           type="button"
           onclick={() => isCreateModalOpen = true}
-          class="inline-flex items-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FFD43B] text-[#183153] text-xs font-black hover:bg-[#F2C41D] transition shadow-xs touch-manipulation active:scale-95"
+          class="inline-flex items-center gap-2 py-2.5 px-4 rounded-xl bg-[#3157D5] hover:bg-[#2646B8] text-white text-xs font-bold transition shadow-sm touch-manipulation active:scale-95"
         >
           <Plus class="w-4 h-4 stroke-[2.5]" />
           <span>Buat Peluang Baru</span>
         </button>
         <a 
           href="/dashboard/messages" 
-          class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition relative min-h-[42px] min-w-[42px] flex items-center justify-center touch-manipulation"
+          class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition relative min-h-[42px] min-w-[42px] flex items-center justify-center touch-manipulation border border-white/10"
           title="Pesan Masuk"
         >
-          <Bell class="w-4 h-4 text-[#FFD43B]" />
+          <Bell class="w-4 h-4 text-[#FFC83D]" />
           {#if requests.filter(r => r.status === 'pending').length > 0}
-            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#FFC83D] rounded-full"></span>
           {/if}
         </a>
       </div>
@@ -207,49 +207,49 @@
 
   <!-- 2. Quick Stat Cards (Responsive 4-column Grid) -->
   <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-    <div class="p-4 rounded-2xl bg-white border border-[#E7E5E0] shadow-xs flex items-center gap-3">
+    <div class="p-4 rounded-2xl bg-white border border-[#E5E8EF] shadow-xs flex items-center gap-3">
       <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0">
         <Clock class="w-5 h-5 stroke-[2.5]" />
       </div>
       <div>
-        <div class="text-xl font-black text-[#183153] font-heading leading-none">
+        <div class="text-xl font-black text-[#101B35] font-heading leading-none">
           {requests.filter(r => r.status === 'pending').length}
         </div>
-        <div class="text-[11px] text-gray-500 font-semibold mt-1">Permintaan Baru</div>
+        <div class="text-[11px] text-[#68738A] font-semibold mt-1">Permintaan Baru</div>
       </div>
     </div>
 
-    <div class="p-4 rounded-2xl bg-white border border-[#E7E5E0] shadow-xs flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#18866B] flex items-center justify-center shrink-0">
+    <div class="p-4 rounded-2xl bg-white border border-[#E5E8EF] shadow-xs flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-[#EEF2FF] text-[#3157D5] flex items-center justify-center shrink-0">
         <Users class="w-5 h-5 stroke-[2.5]" />
       </div>
       <div>
-        <div class="text-xl font-black text-[#183153] font-heading leading-none">
+        <div class="text-xl font-black text-[#101B35] font-heading leading-none">
           {requests.filter(r => r.status === 'accepted').length + 8}
         </div>
-        <div class="text-[11px] text-gray-500 font-semibold mt-1">Mahasiswa Dibimbing</div>
+        <div class="text-[11px] text-[#68738A] font-semibold mt-1">Mahasiswa Dibimbing</div>
       </div>
     </div>
 
-    <div class="p-4 rounded-2xl bg-white border border-[#E7E5E0] shadow-xs flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center shrink-0">
+    <div class="p-4 rounded-2xl bg-white border border-[#E5E8EF] shadow-xs flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-[#EEF2FF] text-[#3157D5] flex items-center justify-center shrink-0">
         <Briefcase class="w-5 h-5 stroke-[2.5]" />
       </div>
       <div>
-        <div class="text-xl font-black text-[#183153] font-heading leading-none">
+        <div class="text-xl font-black text-[#101B35] font-heading leading-none">
           {myOpportunities.length}
         </div>
-        <div class="text-[11px] text-gray-500 font-semibold mt-1">Peluang Aktif</div>
+        <div class="text-[11px] text-[#68738A] font-semibold mt-1">Peluang Aktif</div>
       </div>
     </div>
 
-    <div class="p-4 rounded-2xl bg-white border border-[#E7E5E0] shadow-xs flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-[#FFD43B]/25 text-[#183153] flex items-center justify-center shrink-0">
-        <MessageSquare class="w-5 h-5 stroke-[2.5]" />
+    <div class="p-4 rounded-2xl bg-white border border-[#E5E8EF] shadow-xs flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-amber-50 text-[#101B35] flex items-center justify-center shrink-0">
+        <MessageSquare class="w-5 h-5 stroke-[2.5] text-[#3157D5]" />
       </div>
       <div>
-        <div class="text-xl font-black text-[#183153] font-heading leading-none">5</div>
-        <div class="text-[11px] text-gray-500 font-semibold mt-1">Sesi Diskusi</div>
+        <div class="text-xl font-black text-[#101B35] font-heading leading-none">5</div>
+        <div class="text-[11px] text-[#68738A] font-semibold mt-1">Sesi Diskusi</div>
       </div>
     </div>
   </div>
@@ -258,22 +258,22 @@
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
     <!-- LEFT COLUMN: Permintaan Mentoring Masuk (7 cols) -->
     <div class="lg:col-span-7 space-y-4">
-      <div class="p-4 sm:p-5 rounded-3xl bg-white border border-[#E7E5E0] shadow-xs space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E7E5E0] pb-3">
+      <div class="p-5 sm:p-6 rounded-3xl bg-white border border-[#E5E8EF] shadow-xs space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E5E8EF] pb-3.5">
           <div>
-            <h2 class="text-sm sm:text-base font-black text-[#183153] uppercase tracking-wider font-heading">
+            <h2 class="text-sm sm:text-base font-black text-[#101B35] uppercase tracking-wider font-heading">
               Permintaan Mentoring Masuk
             </h2>
-            <p class="text-[11px] text-gray-500">Mahasiswa yang mengajukan bimbingan karier kepada Anda</p>
+            <p class="text-[11px] text-[#68738A]">Mahasiswa yang mengajukan bimbingan karier kepada Anda</p>
           </div>
 
           <!-- Filter Tabs -->
-          <div class="flex items-center gap-1.5 bg-[#FAF9F6] p-1 rounded-xl border border-[#E7E5E0] text-xs">
+          <div class="flex items-center gap-1 bg-[#F7F6F2] p-1 rounded-xl border border-[#E5E8EF] text-xs">
             <button 
               type="button"
               onclick={() => requestFilter = 'all'}
               class="px-2.5 py-1 rounded-lg font-bold text-[11px] transition touch-manipulation
-                {requestFilter === 'all' ? 'bg-[#183153] text-[#FFD43B] shadow-xs' : 'text-gray-600 hover:text-black'}"
+                {requestFilter === 'all' ? 'bg-[#101B35] text-white shadow-xs' : 'text-[#68738A] hover:text-[#101B35]'}"
             >
               Semua ({requests.length})
             </button>
@@ -281,7 +281,7 @@
               type="button"
               onclick={() => requestFilter = 'pending'}
               class="px-2.5 py-1 rounded-lg font-bold text-[11px] transition touch-manipulation
-                {requestFilter === 'pending' ? 'bg-[#183153] text-[#FFD43B] shadow-xs' : 'text-gray-600 hover:text-black'}"
+                {requestFilter === 'pending' ? 'bg-[#101B35] text-white shadow-xs' : 'text-[#68738A] hover:text-[#101B35]'}"
             >
               Menunggu ({requests.filter(r => r.status === 'pending').length})
             </button>
@@ -289,7 +289,7 @@
               type="button"
               onclick={() => requestFilter = 'accepted'}
               class="px-2.5 py-1 rounded-lg font-bold text-[11px] transition touch-manipulation
-                {requestFilter === 'accepted' ? 'bg-[#183153] text-[#FFD43B] shadow-xs' : 'text-gray-600 hover:text-black'}"
+                {requestFilter === 'accepted' ? 'bg-[#101B35] text-white shadow-xs' : 'text-[#68738A] hover:text-[#101B35]'}"
             >
               Diterima ({requests.filter(r => r.status === 'accepted').length})
             </button>
@@ -297,39 +297,39 @@
         </div>
 
         {#if isLoading}
-          <div class="p-8 text-center text-xs text-gray-500">
+          <div class="p-8 text-center text-xs text-[#68738A]">
             <div class="inline-block animate-spin mb-2">⏳</div>
             <p>Memuat permintaan bimbingan mahasiswa...</p>
           </div>
         {:else if filteredRequests.length === 0}
-          <div class="p-8 text-center space-y-2 rounded-2xl bg-[#FAF9F6] border border-[#E7E5E0]">
-            <HeartHandshake class="w-8 h-8 text-gray-400 mx-auto" />
-            <p class="text-xs font-bold text-gray-700">Tidak ada permintaan pada kategori ini</p>
-            <p class="text-[11px] text-gray-500">Permintaan baru dari mahasiswa UT akan langsung muncul di sini.</p>
+          <div class="p-8 text-center space-y-2 rounded-2xl bg-[#F7F6F2] border border-[#E5E8EF]">
+            <HeartHandshake class="w-8 h-8 text-[#68738A]/50 mx-auto" />
+            <p class="text-xs font-bold text-[#101B35]">Tidak ada permintaan pada kategori ini</p>
+            <p class="text-[11px] text-[#68738A]">Permintaan baru dari mahasiswa UT akan langsung muncul di sini.</p>
           </div>
         {:else}
           <div class="space-y-3">
             {#each filteredRequests as req (req.id)}
-              <div class="p-4 rounded-2xl bg-[#FAF9F6] border border-[#E7E5E0] space-y-3 hover:border-[#183153]/30 transition">
+              <div class="p-4 rounded-2xl bg-[#F7F6F2] border border-[#E5E8EF] space-y-3 hover:border-[#3157D5]/40 transition">
                 <div class="flex items-start gap-3">
                   <img 
                     src={req.sender?.avatar_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80'} 
                     alt={req.sender?.full_name} 
-                    class="w-11 h-11 rounded-xl object-cover ring-2 ring-[#FFD43B] shrink-0"
+                    class="w-11 h-11 rounded-xl object-cover ring-2 ring-[#3157D5]/20 shrink-0"
                   />
                   <div class="min-w-0 flex-1">
                     <div class="flex items-center gap-2">
-                      <h3 class="text-xs sm:text-sm font-extrabold text-[#183153] truncate">{req.sender?.full_name || 'Mahasiswa UT'}</h3>
-                      <span class="text-[10px] font-bold text-[#183153] bg-[#FFD43B]/40 px-2 py-0.5 rounded">MHS</span>
+                      <h3 class="text-xs sm:text-sm font-extrabold text-[#101B35] truncate">{req.sender?.full_name || 'Mahasiswa UT'}</h3>
+                      <span class="text-[10px] font-bold text-[#3157D5] bg-[#EEF2FF] px-2 py-0.5 rounded border border-[#3157D5]/15">MHS</span>
                     </div>
-                    <p class="text-[11px] text-gray-600 truncate mt-0.5 font-medium">
+                    <p class="text-[11px] text-[#68738A] truncate mt-0.5 font-medium">
                       Prodi: {req.sender?.study_program || 'Sistem Informasi'} • NIM: {req.sender?.nim || '-'}
                     </p>
                   </div>
                 </div>
 
                 <!-- Pesan Pengajuan Mahasiswa -->
-                <div class="p-3 rounded-xl bg-white border border-[#E7E5E0] text-xs text-gray-700 leading-relaxed italic">
+                <div class="p-3 rounded-xl bg-white border border-[#E5E8EF] text-xs text-[#20283B] leading-relaxed italic">
                   "{req.note || 'Halo Kak, saya mahasiswa UT ingin berkonsultasi mengenai jalur karier dan bimbingan portofolio.'}"
                 </div>
 
@@ -340,14 +340,14 @@
                       <button 
                         type="button"
                         onclick={() => handleReject(req.id)}
-                        class="flex-1 py-2 px-3 rounded-xl border border-gray-300 bg-white text-gray-700 text-xs font-bold hover:bg-gray-100 transition touch-manipulation min-h-[40px]"
+                        class="flex-1 py-2 px-3 rounded-xl border border-[#E5E8EF] bg-white text-[#68738A] text-xs font-bold hover:bg-[#F7F6F2] hover:text-[#101B35] transition touch-manipulation min-h-[40px]"
                       >
                         Tolak
                       </button>
                       <button 
                         type="button"
                         onclick={() => handleAccept(req.id)}
-                        class="flex-1 py-2 px-3 rounded-xl bg-[#18866B] text-white text-xs font-bold hover:bg-[#0F5A47] transition touch-manipulation min-h-[40px] flex items-center justify-center gap-1.5 shadow-xs"
+                        class="flex-1 py-2 px-3 rounded-xl bg-[#3157D5] text-white text-xs font-bold hover:bg-[#2646B8] transition touch-manipulation min-h-[40px] flex items-center justify-center gap-1.5 shadow-xs"
                       >
                         <Check class="w-3.5 h-3.5" />
                         <span>Terima Bimbingan</span>
@@ -355,20 +355,20 @@
                     </div>
                   {:else if req.status === 'accepted'}
                     <div class="flex items-center justify-between w-full">
-                      <span class="inline-flex items-center gap-1.5 text-xs font-bold text-[#18866B]">
-                        <CheckCircle2 class="w-4 h-4 text-[#18866B]" />
+                      <span class="inline-flex items-center gap-1.5 text-xs font-bold text-[#3157D5]">
+                        <CheckCircle2 class="w-4 h-4 text-[#3157D5]" />
                         <span>Bimbingan Aktif</span>
                       </span>
                       <a 
                         href="/dashboard/messages" 
-                        class="text-xs font-bold text-[#183153] bg-white border border-[#E7E5E0] hover:bg-[#183153] hover:text-[#FFD43B] px-3.5 py-1.5 rounded-xl transition flex items-center gap-1 touch-manipulation"
+                        class="text-xs font-bold text-[#101B35] bg-white border border-[#E5E8EF] hover:bg-[#101B35] hover:text-white px-3.5 py-1.5 rounded-xl transition flex items-center gap-1 touch-manipulation"
                       >
                         <span>Buka Chat</span>
                         <ChevronRight class="w-3.5 h-3.5" />
                       </a>
                     </div>
                   {:else}
-                    <span class="text-xs font-bold text-gray-400">Permintaan Ditolak</span>
+                    <span class="text-xs font-bold text-[#68738A]">Permintaan Ditolak</span>
                   {/if}
                 </div>
               </div>
@@ -381,16 +381,16 @@
     <!-- RIGHT COLUMN: Mentor Availability, Published Opportunities & Tips (5 cols) -->
     <div class="lg:col-span-5 space-y-4">
       <!-- Card: Ketersediaan Mentor -->
-      <div class="p-4 sm:p-5 rounded-3xl bg-white border border-[#E7E5E0] shadow-xs space-y-3.5">
+      <div class="p-5 rounded-3xl bg-white border border-[#E5E8EF] shadow-xs space-y-3.5">
         <div class="flex items-center justify-between gap-4">
           <div class="space-y-0.5 min-w-0 flex-1">
             <div class="flex items-center gap-2">
-              <HeartHandshake class="w-4 h-4 text-[#18866B]" />
-              <h3 class="text-xs sm:text-sm font-black text-[#183153] uppercase tracking-wider font-heading">
+              <HeartHandshake class="w-4 h-4 text-[#3157D5]" />
+              <h3 class="text-xs sm:text-sm font-black text-[#101B35] uppercase tracking-wider font-heading">
                 Status Ketersediaan
               </h3>
             </div>
-            <p class="text-[11px] text-gray-500">
+            <p class="text-[11px] text-[#68738A]">
               {isMentorAvailable ? 'Profil aktif di rekomendasi bimbingan' : 'Sedang tidak menerima permohonan baru'}
             </p>
           </div>
@@ -400,7 +400,7 @@
             onclick={handleToggleMentor}
             aria-label="Ubah status ketersediaan mentoring"
             class="relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none touch-manipulation
-              {isMentorAvailable ? 'bg-[#18866B]' : 'bg-gray-300'}"
+              {isMentorAvailable ? 'bg-[#3157D5]' : 'bg-gray-300'}"
             role="switch"
             aria-checked={isMentorAvailable}
           >
@@ -412,11 +412,11 @@
         </div>
 
         <!-- Mentoring Topics Tag Pills -->
-        <div class="pt-2 border-t border-[#E7E5E0] space-y-2">
-          <p class="text-[11px] font-bold text-gray-600">Topik Bimbingan yang Anda Buka:</p>
+        <div class="pt-2 border-t border-[#E5E8EF] space-y-2">
+          <p class="text-[11px] font-bold text-[#68738A]">Topik Bimbingan yang Anda Buka:</p>
           <div class="flex flex-wrap gap-1.5">
             {#each mentorTopics as topic}
-              <span class="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-[#FAF9F6] text-[#183153] border border-[#E7E5E0]">
+              <span class="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-[#EEF2FF] text-[#3157D5] border border-[#3157D5]/15">
                 {topic}
               </span>
             {/each}
@@ -425,18 +425,18 @@
       </div>
 
       <!-- Card: Peluang & Lowongan dari Anda -->
-      <div class="p-4 sm:p-5 rounded-3xl bg-white border border-[#E7E5E0] shadow-xs space-y-3.5">
-        <div class="flex items-center justify-between border-b border-[#E7E5E0] pb-2.5">
+      <div class="p-5 rounded-3xl bg-white border border-[#E5E8EF] shadow-xs space-y-3.5">
+        <div class="flex items-center justify-between border-b border-[#E5E8EF] pb-2.5">
           <div>
-            <h3 class="text-xs sm:text-sm font-black text-[#183153] uppercase tracking-wider font-heading">
+            <h3 class="text-xs sm:text-sm font-black text-[#101B35] uppercase tracking-wider font-heading">
               Peluang dari Anda
             </h3>
-            <p class="text-[11px] text-gray-500">Lowongan magang & proyek yang Anda buka</p>
+            <p class="text-[11px] text-[#68738A]">Lowongan magang & proyek yang Anda buka</p>
           </div>
           <button 
             type="button"
             onclick={() => isCreateModalOpen = true}
-            class="text-[11px] font-bold text-[#18866B] hover:underline flex items-center gap-0.5"
+            class="text-[11px] font-bold text-[#3157D5] hover:underline flex items-center gap-0.5"
           >
             <Plus class="w-3.5 h-3.5" />
             <span>Tambah</span>
@@ -444,14 +444,14 @@
         </div>
 
         {#if myOpportunities.length === 0}
-          <div class="p-6 rounded-2xl bg-[#FAF9F6] border border-[#E7E5E0] text-center space-y-2">
-            <Briefcase class="w-7 h-7 text-gray-400 mx-auto" />
-            <p class="text-xs font-bold text-gray-700">Belum ada peluang yang Anda publikasikan</p>
-            <p class="text-[11px] text-gray-500">Bagikan info magang atau sesi bimbingan portofolio bagi adik tingkat UT.</p>
+          <div class="p-6 rounded-2xl bg-[#F7F6F2] border border-[#E5E8EF] text-center space-y-2">
+            <Briefcase class="w-7 h-7 text-[#68738A]/50 mx-auto" />
+            <p class="text-xs font-bold text-[#101B35]">Belum ada peluang yang Anda publikasikan</p>
+            <p class="text-[11px] text-[#68738A]">Bagikan info magang atau sesi bimbingan portofolio bagi mahasiswa UT.</p>
             <button 
               type="button"
               onclick={() => isCreateModalOpen = true}
-              class="inline-flex items-center gap-1.5 py-2 px-3.5 rounded-xl bg-[#183153] text-[#FFD43B] text-xs font-bold hover:bg-[#102138] transition touch-manipulation mt-1"
+              class="inline-flex items-center gap-1.5 py-2 px-3.5 rounded-xl bg-[#3157D5] text-white text-xs font-bold hover:bg-[#2646B8] transition touch-manipulation mt-1 shadow-xs"
             >
               <Plus class="w-3.5 h-3.5" />
               <span>Publikasikan Sekarang</span>
@@ -460,18 +460,18 @@
         {:else}
           <div class="space-y-2.5">
             {#each myOpportunities as opp (opp.id)}
-              <div class="p-3.5 rounded-2xl bg-[#FAF9F6] border border-[#E7E5E0] space-y-1.5">
+              <div class="p-3.5 rounded-2xl bg-[#F7F6F2] border border-[#E5E8EF] space-y-1.5 hover:border-[#3157D5]/40 transition">
                 <div class="flex items-center justify-between">
-                  <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-md bg-emerald-50 text-[#18866B]">
+                  <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-md bg-[#EEF2FF] text-[#3157D5] border border-[#3157D5]/15">
                     {opp.type}
                   </span>
-                  <span class="text-[10px] text-gray-500 flex items-center gap-1">
+                  <span class="text-[10px] text-[#68738A] flex items-center gap-1">
                     <MapPin class="w-2.5 h-2.5" />
                     <span>{opp.location}</span>
                   </span>
                 </div>
-                <h4 class="text-xs font-extrabold text-[#183153] leading-snug">{opp.title}</h4>
-                <p class="text-[11px] text-gray-600 line-clamp-2">{opp.description}</p>
+                <h4 class="text-xs font-extrabold text-[#101B35] leading-snug">{opp.title}</h4>
+                <p class="text-[11px] text-[#68738A] line-clamp-2">{opp.description}</p>
               </div>
             {/each}
           </div>
@@ -479,15 +479,15 @@
       </div>
 
       <!-- Card: Tips Bimbingan Alumni -->
-      <div class="p-4 sm:p-5 rounded-3xl bg-[#FAF9F6] border border-[#E7E5E0] shadow-xs space-y-2.5 text-xs">
-        <div class="flex items-center gap-2 text-[#183153] font-bold">
-          <Lightbulb class="w-4 h-4 text-[#FFD43B]" />
+      <div class="p-5 rounded-3xl bg-[#F7F6F2] border border-[#E5E8EF] shadow-xs space-y-2.5 text-xs">
+        <div class="flex items-center gap-2 text-[#101B35] font-bold">
+          <Lightbulb class="w-4 h-4 text-[#FFC83D]" />
           <span>Panduan Singkat Mentor UT REKA</span>
         </div>
-        <p class="text-[11px] text-gray-600 leading-relaxed">
+        <p class="text-[11px] text-[#68738A] leading-relaxed">
           • Mahasiswa UT belajar mandiri. Berikan masukan langsung pada portofolio atau CV agar bimbingan efisien.
         </p>
-        <p class="text-[11px] text-gray-600 leading-relaxed">
+        <p class="text-[11px] text-[#68738A] leading-relaxed">
           • Gunakan fitur Pesan untuk menyepakati jadwal Zoom atau Google Meet yang fleksibel.
         </p>
       </div>
@@ -498,16 +498,16 @@
 <!-- Modal: Buat Peluang Baru -->
 {#if isCreateModalOpen}
   <div class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-xs p-0 sm:p-4">
-    <div class="w-full max-w-lg bg-white rounded-t-3xl sm:rounded-3xl p-6 space-y-5 max-h-[90vh] overflow-y-auto shadow-2xl animate-in slide-in-from-bottom-5">
-      <div class="flex items-center justify-between border-b border-[#E7E5E0] pb-3">
+    <div class="w-full max-w-lg bg-white rounded-t-3xl sm:rounded-3xl p-6 space-y-5 max-h-[90vh] overflow-y-auto shadow-2xl animate-in slide-in-from-bottom-5 border border-[#E5E8EF]">
+      <div class="flex items-center justify-between border-b border-[#E5E8EF] pb-3">
         <div>
-          <h3 class="text-base font-extrabold text-[#183153]">Publikasikan Peluang Baru</h3>
-          <p class="text-xs text-gray-500">Buka akses magang, proyek, atau bimbingan bagi mahasiswa UT</p>
+          <h3 class="text-base font-extrabold text-[#101B35]">Publikasikan Peluang Baru</h3>
+          <p class="text-xs text-[#68738A]">Buka akses magang, proyek, atau bimbingan bagi mahasiswa UT</p>
         </div>
         <button 
           type="button"
           onclick={() => isCreateModalOpen = false}
-          class="p-1 rounded-lg text-gray-400 hover:text-black touch-manipulation"
+          class="p-1 rounded-lg text-[#68738A] hover:text-[#101B35] touch-manipulation"
           aria-label="Tutup modal"
         >
           <X class="w-5 h-5" />
@@ -516,24 +516,24 @@
 
       <form onsubmit={handleCreateOpportunity} class="space-y-4 text-xs">
         <div>
-          <label for="opp-title" class="block font-bold text-gray-700 uppercase mb-1">Judul Peluang / Posisi</label>
+          <label for="opp-title" class="block font-bold text-[#101B35] uppercase mb-1">Judul Peluang / Posisi</label>
           <input 
             id="opp-title"
             type="text"
             required
             bind:value={newTitle}
             placeholder="Contoh: Magang Frontend Developer (Sistem Informasi)"
-            class="w-full px-3.5 py-2.5 rounded-xl border border-[#E7E5E0] text-gray-900 outline-none focus:border-[#183153]"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E8EF] bg-white text-[#20283B] outline-none focus:border-[#3157D5] focus:ring-1 focus:ring-[#3157D5]/20 transition"
           />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label for="opp-type" class="block font-bold text-gray-700 uppercase mb-1">Tipe Peluang</label>
+            <label for="opp-type" class="block font-bold text-[#101B35] uppercase mb-1">Tipe Peluang</label>
             <select 
               id="opp-type"
               bind:value={newType}
-              class="w-full px-3.5 py-2.5 rounded-xl border border-[#E7E5E0] text-gray-900 outline-none focus:border-[#183153]"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E8EF] bg-white text-[#20283B] outline-none focus:border-[#3157D5] focus:ring-1 focus:ring-[#3157D5]/20 transition"
             >
               <option value="mentoring">Sesi Mentoring</option>
               <option value="internship">Magang (Internship)</option>
@@ -543,64 +543,64 @@
           </div>
 
           <div>
-            <label for="opp-location" class="block font-bold text-gray-700 uppercase mb-1">Lokasi Kerja</label>
+            <label for="opp-location" class="block font-bold text-[#101B35] uppercase mb-1">Lokasi Kerja</label>
             <input 
               id="opp-location"
               type="text"
               required
               bind:value={newLocation}
               placeholder="Contoh: Remote / Jakarta"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-[#E7E5E0] text-gray-900 outline-none focus:border-[#183153]"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E8EF] bg-white text-[#20283B] outline-none focus:border-[#3157D5] focus:ring-1 focus:ring-[#3157D5]/20 transition"
             />
           </div>
         </div>
 
         <div>
-          <label for="opp-company" class="block font-bold text-gray-700 uppercase mb-1">Nama Perusahaan / Organisasi</label>
+          <label for="opp-company" class="block font-bold text-[#101B35] uppercase mb-1">Nama Perusahaan / Organisasi</label>
           <input 
             id="opp-company"
             type="text"
             required
             bind:value={newCompany}
             placeholder="Contoh: PT Teknologi Bangsa / Alumni Network"
-            class="w-full px-3.5 py-2.5 rounded-xl border border-[#E7E5E0] text-gray-900 outline-none focus:border-[#183153]"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E8EF] bg-white text-[#20283B] outline-none focus:border-[#3157D5] focus:ring-1 focus:ring-[#3157D5]/20 transition"
           />
         </div>
 
         <div>
-          <label for="opp-desc" class="block font-bold text-gray-700 uppercase mb-1">Deskripsi Lengkap</label>
+          <label for="opp-desc" class="block font-bold text-[#101B35] uppercase mb-1">Deskripsi Lengkap</label>
           <textarea 
             id="opp-desc"
             required
             rows="3"
             bind:value={newDesc}
             placeholder="Jelaskan peran, tanggung jawab, dan kriteria kualifikasi..."
-            class="w-full px-3.5 py-2.5 rounded-xl border border-[#E7E5E0] text-gray-900 outline-none focus:border-[#183153]"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E8EF] bg-white text-[#20283B] outline-none focus:border-[#3157D5] focus:ring-1 focus:ring-[#3157D5]/20 transition"
           ></textarea>
         </div>
 
         <div>
-          <label for="opp-reqs" class="block font-bold text-gray-700 uppercase mb-1">Persyaratan (Pisahkan dengan koma)</label>
+          <label for="opp-reqs" class="block font-bold text-[#101B35] uppercase mb-1">Persyaratan (Pisahkan dengan koma)</label>
           <input 
             id="opp-reqs"
             type="text"
             bind:value={newReqs}
             placeholder="Mahasiswa aktif UT, Dasar JavaScript, Portofolio GitHub"
-            class="w-full px-3.5 py-2.5 rounded-xl border border-[#E7E5E0] text-gray-900 outline-none focus:border-[#183153]"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E8EF] bg-white text-[#20283B] outline-none focus:border-[#3157D5] focus:ring-1 focus:ring-[#3157D5]/20 transition"
           />
         </div>
 
-        <div class="pt-3 border-t border-[#E7E5E0] flex items-center justify-end gap-2">
+        <div class="pt-3 border-t border-[#E5E8EF] flex items-center justify-end gap-2">
           <button 
             type="button"
             onclick={() => isCreateModalOpen = false}
-            class="px-4 py-2.5 rounded-xl border border-gray-300 text-gray-700 font-bold hover:bg-gray-50 touch-manipulation"
+            class="px-4 py-2.5 rounded-xl border border-[#E5E8EF] text-[#68738A] font-bold hover:bg-[#F7F6F2] hover:text-[#101B35] touch-manipulation transition"
           >
             Batal
           </button>
           <button 
             type="submit"
-            class="px-5 py-2.5 rounded-xl bg-[#183153] text-[#FFD43B] font-black hover:bg-[#102138] transition touch-manipulation shadow-xs"
+            class="px-5 py-2.5 rounded-xl bg-[#3157D5] text-white font-bold hover:bg-[#2646B8] transition touch-manipulation shadow-xs"
           >
             Publikasikan Peluang
           </button>

@@ -26,7 +26,7 @@
     {
       num: '01',
       title: 'Pendaftaran & Verifikasi',
-      desc: 'Mahasiswa dan alumni mendaftar dengan NIM UT. Tim sistem memverifikasi keabsahan data untuk menjaga keamanan komunitas.'
+      desc: 'Mahasiswa dan alumni mendaftar dengan identitas UT. Tim sistem memverifikasi keabsahan data untuk menjaga keamanan komunitas.'
     },
     {
       num: '02',
@@ -69,33 +69,33 @@
   <title>Program Mentoring Alumni | UT REKA</title>
 </svelte:head>
 
-<div class="min-h-screen bg-[#FAF9F6] text-[#202124] antialiased selection:bg-[#FFD43B] selection:text-[#183153] pb-24 md:pb-16">
+<div class="min-h-screen bg-[#F7F6F2] text-[#20283B] antialiased selection:bg-[#3157D5] selection:text-white pb-24 md:pb-16">
   <!-- Top App Bar / Header -->
-  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#E7E5E0] px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#E5E8EF] px-4 sm:px-6 h-16 flex items-center justify-between">
     <a 
       href="/" 
-      class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#183153] hover:text-[#18866B] transition touch-manipulation"
+      class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#101B35] hover:text-[#3157D5] transition touch-manipulation"
     >
       <ArrowLeft class="w-4 h-4" />
       <span class="hidden sm:inline">Kembali ke Beranda</span>
     </a>
 
-    <a href="/" title="UT REKA">
-      <img src="/images/ut-reka-logo-transparent.png" alt="UT REKA Relasi Karir" class="h-10 sm:h-12 w-auto object-contain" />
+    <a href="/" title="UT REKA" class="flex items-center gap-2">
+      <img src="/images/ut-reka-logo-transparent.png" alt="UT REKA Relasi Karir" class="h-10 sm:h-11 w-auto object-contain" />
     </a>
 
     <div class="flex items-center gap-2">
       {#if authStore.isAuthenticated}
         <a 
           href="/dashboard/connections" 
-          class="px-3.5 py-1.5 rounded-xl bg-[#183153] text-[#FFD43B] text-xs font-bold hover:bg-[#102138] transition touch-manipulation shadow-xs"
+          class="px-4 py-2 rounded-xl bg-[#3157D5] text-white text-xs font-bold hover:bg-[#2646B8] transition touch-manipulation shadow-xs"
         >
           Buka Direktori Mentor
         </a>
       {:else}
         <a 
           href="/login" 
-          class="px-3.5 py-1.5 rounded-xl bg-[#183153] text-[#FFD43B] text-xs font-bold hover:bg-[#102138] transition touch-manipulation shadow-xs"
+          class="px-4 py-2 rounded-xl bg-[#3157D5] text-white text-xs font-bold hover:bg-[#2646B8] transition touch-manipulation shadow-xs"
         >
           Masuk Akun
         </a>
@@ -105,13 +105,13 @@
 
   <!-- Hero Section -->
   <section class="max-w-4xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-8 space-y-6">
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#183153] via-[#152e4d] to-[#0f2139] p-6 sm:p-10 text-white shadow-xl border border-[#183153]/50">
-      <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-[#FFD43B]/15 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -left-12 -top-12 w-48 h-48 bg-[#18866B]/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative overflow-hidden rounded-3xl bg-[#101B35] p-6 sm:p-10 text-white shadow-xl border border-[#101B35]/40">
+      <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-[#3157D5]/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-12 -top-12 w-48 h-48 bg-[#5478FF]/20 rounded-full blur-3xl pointer-events-none"></div>
 
       <div class="relative z-10 space-y-4 max-w-2xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold text-[#FFD43B] uppercase tracking-wider">
-          <Sparkles class="w-3.5 h-3.5 text-[#FFD43B]" />
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold text-[#FFC83D] uppercase tracking-wider">
+          <Sparkles class="w-3.5 h-3.5 text-[#FFC83D]" />
           <span>Program Unggulan UT REKA</span>
         </div>
 
@@ -119,22 +119,22 @@
           Bimbingan Karier Personal Langsung dari Alumni UT
         </h1>
 
-        <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">
-          Menghubungkan mahasiswa aktif Universitas Terbuka dari Sabang sampai Merauke dan luar negeri dengan para alumni profesional yang telah berkarier di BUMN, startup teknologi terkemuka, perbankan, dan multinasional.
+        <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+          Menghubungkan mahasiswa aktif Universitas Terbuka dari Sabang sampai Merauke dan perwakilan luar negeri dengan alumni profesional di BUMN, teknologi terkemuka, perbankan, dan multinasional.
         </p>
 
         <!-- Trust Badges -->
         <div class="flex flex-wrap items-center gap-2 pt-2 text-[11px]">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 text-emerald-300 font-semibold border border-white/10">
-            <ShieldCheck class="w-3.5 h-3.5" />
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 text-white font-medium border border-white/15">
+            <ShieldCheck class="w-3.5 h-3.5 text-[#FFC83D]" />
             100% Alumni Terverifikasi
           </span>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 text-amber-200 font-semibold border border-white/10">
-            <CheckCircle2 class="w-3.5 h-3.5 text-[#FFD43B]" />
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 text-white font-medium border border-white/15">
+            <CheckCircle2 class="w-3.5 h-3.5 text-[#3157D5]" />
             Gratis Civitas Akademika
           </span>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 text-blue-200 font-semibold border border-white/10">
-            <Video class="w-3.5 h-3.5" />
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 text-white font-medium border border-white/15">
+            <Video class="w-3.5 h-3.5 text-blue-300" />
             100% Daring Fleksibel
           </span>
         </div>
@@ -143,7 +143,7 @@
         <div class="pt-4 flex flex-wrap items-center gap-3">
           <a 
             href={authStore.isAuthenticated ? '/dashboard/connections' : '/register?role=student'}
-            class="px-5 py-3 rounded-2xl bg-[#FFD43B] text-[#183153] text-xs sm:text-sm font-black hover:bg-[#F2C41D] transition shadow-md touch-manipulation flex items-center gap-2"
+            class="px-5 py-3 rounded-2xl bg-[#3157D5] text-white text-xs sm:text-sm font-bold hover:bg-[#2646B8] transition shadow-md touch-manipulation flex items-center gap-2"
           >
             <span>Cari Mentor Mahasiswa</span>
             <ArrowRight class="w-4 h-4" />
@@ -162,51 +162,51 @@
   <!-- Fitur Utama Program Mentoring -->
   <section class="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-6">
     <div class="text-center space-y-1">
-      <h2 class="text-xl sm:text-2xl font-black font-heading text-[#183153]">
+      <h2 class="text-xl sm:text-2xl font-black font-heading text-[#101B35]">
         Apa Saja yang Didapatkan Mahasiswa?
       </h2>
-      <p class="text-xs sm:text-sm text-gray-500">
+      <p class="text-xs sm:text-sm text-[#68738A]">
         Bimbingan terstruktur yang menjawab kebutuhan dunia kerja modern
       </p>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div class="p-5 rounded-3xl bg-white border border-[#E7E5E0] shadow-xs space-y-3">
-        <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
-          <Sparkles class="w-5 h-5 text-[#FFD43B]" />
+      <div class="p-5 rounded-3xl bg-white border border-[#E5E8EF] shadow-xs space-y-3 hover:border-[#3157D5]/30 transition">
+        <div class="w-10 h-10 rounded-2xl bg-[#EEF2FF] text-[#3157D5] flex items-center justify-center font-bold">
+          <Sparkles class="w-5 h-5 text-[#3157D5]" />
         </div>
-        <h3 class="text-sm font-extrabold text-[#183153]">REKA Match™ Algoritma Kecerdasan</h3>
-        <p class="text-xs text-gray-600 leading-relaxed">
+        <h3 class="text-sm font-extrabold text-[#101B35]">REKA Match™ Algoritma Kecerdasan</h3>
+        <p class="text-xs text-[#68738A] leading-relaxed">
           Sistem mencocokkan profil minat, program studi, dan tujuan karier mahasiswa dengan rekam jejak alumni yang paling relevan untuk memaksimalkan hasil bimbingan.
         </p>
       </div>
 
-      <div class="p-5 rounded-3xl bg-white border border-[#E7E5E0] shadow-xs space-y-3">
-        <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-[#18866B] flex items-center justify-center font-bold">
+      <div class="p-5 rounded-3xl bg-white border border-[#E5E8EF] shadow-xs space-y-3 hover:border-[#3157D5]/30 transition">
+        <div class="w-10 h-10 rounded-2xl bg-[#EEF2FF] text-[#3157D5] flex items-center justify-center font-bold">
           <FileText class="w-5 h-5" />
         </div>
-        <h3 class="text-sm font-extrabold text-[#183153]">Bedah CV & Portofolio Nyata</h3>
-        <p class="text-xs text-gray-600 leading-relaxed">
+        <h3 class="text-sm font-extrabold text-[#101B35]">Bedah CV & Portofolio Nyata</h3>
+        <p class="text-xs text-[#68738A] leading-relaxed">
           Dapatkan ulasan konstruktif langsung dari praktisi yang aktif menyaring pelamar kerja di industri. Optimalkan portofolio agar lolos screening ATS dan HRD.
         </p>
       </div>
 
-      <div class="p-5 rounded-3xl bg-white border border-[#E7E5E0] shadow-xs space-y-3">
-        <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
+      <div class="p-5 rounded-3xl bg-white border border-[#E5E8EF] shadow-xs space-y-3 hover:border-[#3157D5]/30 transition">
+        <div class="w-10 h-10 rounded-2xl bg-[#EEF2FF] text-[#3157D5] flex items-center justify-center font-bold">
           <MessageSquare class="w-5 h-5" />
         </div>
-        <h3 class="text-sm font-extrabold text-[#183153]">Simulasi Interview Teknis & HR</h3>
-        <p class="text-xs text-gray-600 leading-relaxed">
-          Latihan tanya-jawab wawancara kerja BUMN, BUMN Tech, dan korporat ternama dengan umpan balik langsung untuk melatih kepercayaan diri Anda.
+        <h3 class="text-sm font-extrabold text-[#101B35]">Simulasi Interview Teknis & HR</h3>
+        <p class="text-xs text-[#68738A] leading-relaxed">
+          Latihan tanya-jawab wawancara kerja BUMN, tech startup, dan korporat ternama dengan umpan balik langsung untuk melatih kepercayaan diri Anda.
         </p>
       </div>
 
-      <div class="p-5 rounded-3xl bg-white border border-[#E7E5E0] shadow-xs space-y-3">
-        <div class="w-10 h-10 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold">
+      <div class="p-5 rounded-3xl bg-white border border-[#E5E8EF] shadow-xs space-y-3 hover:border-[#3157D5]/30 transition">
+        <div class="w-10 h-10 rounded-2xl bg-[#EEF2FF] text-[#3157D5] flex items-center justify-center font-bold">
           <GraduationCap class="w-5 h-5" />
         </div>
-        <h3 class="text-sm font-extrabold text-[#183153]">Kiat Sukses Mahasiswa Mandiri</h3>
-        <p class="text-xs text-gray-600 leading-relaxed">
+        <h3 class="text-sm font-extrabold text-[#101B35]">Kiat Sukses Mahasiswa Mandiri</h3>
+        <p class="text-xs text-[#68738A] leading-relaxed">
           Alumni UT berbagi pengalaman nyata bagaimana membagi waktu antara kuliah jarak jauh, pekerjaan sehari-hari, dan persiapan karier masa depan.
         </p>
       </div>
@@ -215,20 +215,20 @@
 
   <!-- Cara Kerja / Step-by-Step -->
   <section class="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-6">
-    <div class="p-6 sm:p-8 rounded-3xl bg-white border border-[#E7E5E0] shadow-xs space-y-6">
+    <div class="p-6 sm:p-8 rounded-3xl bg-white border border-[#E5E8EF] shadow-xs space-y-6">
       <div class="text-center space-y-1">
-        <span class="text-[11px] font-bold uppercase tracking-wider text-[#18866B]">Alur Langkah Mudah</span>
-        <h2 class="text-xl sm:text-2xl font-black font-heading text-[#183153]">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-[#3157D5]">Alur Langkah Mudah</span>
+        <h2 class="text-xl sm:text-2xl font-black font-heading text-[#101B35]">
           Bagaimana Cara Memulai Mentoring?
         </h2>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {#each mentorSteps as step}
-          <div class="p-4 rounded-2xl bg-[#FAF9F6] border border-[#E7E5E0] space-y-2">
-            <span class="text-xl font-black text-[#FFD43B] font-mono leading-none">{step.num}</span>
-            <h3 class="text-xs font-extrabold text-[#183153]">{step.title}</h3>
-            <p class="text-[11px] text-gray-600 leading-relaxed">{step.desc}</p>
+          <div class="p-4 rounded-2xl bg-[#F7F6F2] border border-[#E5E8EF] space-y-2">
+            <span class="text-xl font-black text-[#3157D5] font-mono leading-none">{step.num}</span>
+            <h3 class="text-xs font-extrabold text-[#101B35]">{step.title}</h3>
+            <p class="text-[11px] text-[#68738A] leading-relaxed">{step.desc}</p>
           </div>
         {/each}
       </div>
@@ -237,24 +237,24 @@
 
   <!-- Call to Action bagi Alumni (Ingin Jadi Mentor) -->
   <section id="daftar-mentor" class="max-w-4xl mx-auto px-4 sm:px-6 py-6">
-    <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#18866B] via-[#10624e] to-[#183153] text-white shadow-lg space-y-4">
+    <div class="p-6 sm:p-8 rounded-3xl bg-[#101B35] text-white shadow-lg space-y-4 border border-[#101B35]/40">
       <div class="flex items-center gap-2">
-        <Award class="w-5 h-5 text-[#FFD43B]" />
-        <span class="text-xs font-bold uppercase tracking-wider text-emerald-100">Bagi Rekan Alumni UT</span>
+        <Award class="w-5 h-5 text-[#FFC83D]" />
+        <span class="text-xs font-bold uppercase tracking-wider text-gray-300">Bagi Rekan Alumni UT</span>
       </div>
 
       <h2 class="text-xl sm:text-2xl font-black font-heading text-white">
         Bantu Generasi Muda UT Meraih Potensi Karier Terbaik
       </h2>
 
-      <p class="text-xs sm:text-sm text-emerald-100 leading-relaxed max-w-2xl">
+      <p class="text-xs sm:text-sm text-gray-300 leading-relaxed max-w-2xl">
         Anda alumni UT yang telah meniti karier profesional? Dedikasikan sedikit waktu luang Anda untuk berbagi pandangan, memberikan review portofolio, dan membimbing adik-adik tingkat di almamater.
       </p>
 
       <div class="pt-2 flex flex-wrap items-center gap-3">
         <a 
           href="/register?role=alumni"
-          class="px-5 py-3 rounded-2xl bg-[#FFD43B] text-[#183153] text-xs sm:text-sm font-black hover:bg-[#F2C41D] transition shadow-md touch-manipulation"
+          class="px-5 py-3 rounded-2xl bg-[#3157D5] text-white text-xs sm:text-sm font-bold hover:bg-[#2646B8] transition shadow-md touch-manipulation"
         >
           Daftar Menjadi Mentor Alumni
         </a>
@@ -271,25 +271,25 @@
   <!-- FAQ Section -->
   <section class="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-4">
     <div class="text-center space-y-1">
-      <h2 class="text-xl font-black font-heading text-[#183153]">
+      <h2 class="text-xl font-black font-heading text-[#101B35]">
         Pertanyaan Seputar Mentoring
       </h2>
-      <p class="text-xs text-gray-500">Hal yang sering ditanyakan oleh mahasiswa dan alumni</p>
+      <p class="text-xs text-[#68738A]">Hal yang sering ditanyakan oleh mahasiswa dan alumni</p>
     </div>
 
     <div class="space-y-3">
       {#each faqs as item, i}
-        <div class="rounded-2xl bg-white border border-[#E7E5E0] shadow-xs overflow-hidden">
+        <div class="rounded-2xl bg-white border border-[#E5E8EF] shadow-xs overflow-hidden">
           <button 
             type="button"
             onclick={() => openFaq = openFaq === i ? null : i}
-            class="w-full p-4 text-left flex items-center justify-between gap-3 text-xs sm:text-sm font-extrabold text-[#183153] hover:bg-gray-50 transition touch-manipulation"
+            class="w-full p-4 text-left flex items-center justify-between gap-3 text-xs sm:text-sm font-extrabold text-[#101B35] hover:bg-[#F7F6F2] transition touch-manipulation"
           >
             <span>{item.q}</span>
-            <ChevronDown class="w-4 h-4 text-gray-400 shrink-0 transition-transform {openFaq === i ? 'rotate-180' : ''}" />
+            <ChevronDown class="w-4 h-4 text-[#68738A] shrink-0 transition-transform {openFaq === i ? 'rotate-180' : ''}" />
           </button>
           {#if openFaq === i}
-            <div class="px-4 pb-4 pt-1 text-xs text-gray-600 leading-relaxed border-t border-[#FAF9F6]">
+            <div class="px-4 pb-4 pt-1 text-xs text-[#68738A] leading-relaxed border-t border-[#F7F6F2]">
               {item.a}
             </div>
           {/if}

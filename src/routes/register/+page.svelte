@@ -13,7 +13,11 @@
     Calendar, 
     CheckSquare, 
     AlertCircle,
-    CheckCircle2
+    CheckCircle2,
+    ShieldCheck,
+    Eye,
+    EyeOff,
+    Briefcase
   } from 'lucide-svelte';
   import { z } from 'zod';
 
@@ -36,6 +40,7 @@
   let email = $state('');
   let password = $state('');
   let confirmPassword = $state('');
+  let showPassword = $state(false);
   let role = $state<'student' | 'alumni'>('student');
   let nim = $state('');
   let studyProgram = $state('');
@@ -142,145 +147,149 @@
   <title>Daftar Akun — UT REKA | Universitas Terbuka Karier</title>
 </svelte:head>
 
-<div class="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-[#FAF9F6]">
-  <!-- Left Side: Registration Form -->
+<div class="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-[#F7F6F2]">
+  <!-- Left Side: Registration Form Container -->
   <div class="lg:col-span-7 flex flex-col justify-between p-6 sm:p-12 lg:p-16 overflow-y-auto">
     <!-- Top Bar with Back Button -->
     <div class="flex items-center justify-between gap-3 mb-6">
       <a 
         href="/" 
-        class="inline-flex items-center gap-2 text-xs font-bold text-gray-700 hover:text-[#183153] py-2 px-3.5 rounded-xl bg-white border border-[#E7E5E0] hover:bg-gray-50 shadow-2xs transition touch-manipulation group min-h-[40px]"
+        class="inline-flex items-center gap-2 text-xs font-bold text-[#68738A] hover:text-[#101B35] py-2 px-3.5 rounded-xl bg-white border border-[#E5E8EF] hover:bg-slate-50 shadow-2xs transition touch-manipulation group min-h-[40px]"
         aria-label="Kembali ke Beranda"
       >
-        <ArrowLeft class="w-4 h-4 text-[#183153] group-hover:-translate-x-0.5 transition-transform" />
+        <ArrowLeft class="w-4 h-4 text-[#3157D5] group-hover:-translate-x-0.5 transition-transform" />
         <span>Kembali ke Beranda</span>
       </a>
 
       <a href="/" class="inline-flex items-center" title="UT REKA">
-        <img src="/images/ut-reka-logo-transparent.png" alt="UT REKA Relasi Karir" class="h-12 w-auto object-contain" />
+        <img src="/images/ut-reka-logo-transparent.png" alt="UT REKA Relasi Karir" class="h-10 w-auto object-contain" />
       </a>
     </div>
 
-    <div class="max-w-xl w-full mx-auto my-8">
+    <div class="max-w-xl w-full mx-auto my-6 sm:my-8">
       <div class="space-y-2 mb-8">
-        <h1 class="text-3xl font-extrabold text-[#183153] font-heading tracking-tight">Daftar Akun Baru</h1>
-        <p class="text-sm text-gray-600">
-          Bergabunglah dengan jejaring profesional terbesar mahasiswa dan alumni Universitas Terbuka.
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EEF2FF] text-[#3157D5] text-xs font-bold uppercase tracking-wider">
+          <GraduationCap class="w-3.5 h-3.5" />
+          <span>Registrasi Civitas Akademika UT</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-[#101B35] font-heading tracking-tight">Daftar Akun Baru</h1>
+        <p class="text-xs sm:text-sm text-[#68738A] leading-relaxed">
+          Bergabunglah dengan ekosistem karier terpercaya mahasiswa dan alumni Universitas Terbuka di seluruh Indonesia.
         </p>
       </div>
 
       {#if globalError}
-        <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm flex items-start gap-3">
-          <AlertCircle class="w-5 h-5 shrink-0 mt-0.5 text-red-600" />
+        <div class="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs sm:text-sm flex items-start gap-3">
+          <AlertCircle class="w-5 h-5 shrink-0 mt-0.5 text-rose-600" />
           <span>{globalError}</span>
         </div>
       {/if}
 
-      <form onsubmit={handleRegister} class="space-y-5">
-        <!-- Role Selection Segment: STRICTLY STUDENT OR ALUMNI (NO ADMIN CHOICE) -->
+      <form onsubmit={handleRegister} class="space-y-4 sm:space-y-5">
+        <!-- Role Selection Segment -->
         <div>
-          <span class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+          <span class="block text-xs font-bold text-[#101B35] uppercase tracking-wider mb-2">
             Status Keanggotaan
           </span>
           <div class="grid grid-cols-2 gap-3">
             <button 
               type="button"
               onclick={() => role = 'student'}
-              class="p-4 rounded-2xl border text-left transition flex items-center justify-between
-                {role === 'student' ? 'border-[#FFD43B] bg-[#FFD43B]/15 text-[#183153] font-extrabold ring-2 ring-[#FFD43B]' : 'border-[#E7E5E0] bg-white text-gray-600'}"
+              class="p-4 rounded-2xl border text-left transition flex items-center justify-between touch-manipulation
+                {role === 'student' ? 'border-[#3157D5] bg-[#EEF2FF] text-[#101B35] font-extrabold ring-2 ring-[#3157D5]' : 'border-[#E5E8EF] bg-white text-[#68738A] hover:bg-slate-50'}"
             >
               <div>
-                <div class="text-sm">Mahasiswa Aktif</div>
-                <div class="text-[11px] font-normal text-gray-500">Sedang menempuh studi di UT</div>
+                <div class="text-sm font-bold text-[#101B35]">Mahasiswa Aktif</div>
+                <div class="text-[11px] font-normal text-[#68738A] mt-0.5">Sedang menempuh studi di UT</div>
               </div>
               {#if role === 'student'}
-                <CheckCircle2 class="w-5 h-5 text-[#183153] shrink-0" />
+                <CheckCircle2 class="w-5 h-5 text-[#3157D5] shrink-0" />
               {/if}
             </button>
 
             <button 
               type="button"
               onclick={() => role = 'alumni'}
-              class="p-4 rounded-2xl border text-left transition flex items-center justify-between
-                {role === 'alumni' ? 'border-[#18866B] bg-[#18866B]/15 text-[#183153] font-extrabold ring-2 ring-[#18866B]' : 'border-[#E7E5E0] bg-white text-gray-600'}"
+              class="p-4 rounded-2xl border text-left transition flex items-center justify-between touch-manipulation
+                {role === 'alumni' ? 'border-[#3157D5] bg-[#EEF2FF] text-[#101B35] font-extrabold ring-2 ring-[#3157D5]' : 'border-[#E5E8EF] bg-white text-[#68738A] hover:bg-slate-50'}"
             >
               <div>
-                <div class="text-sm">Alumni UT</div>
-                <div class="text-[11px] font-normal text-gray-500">Telah lulus & siap berbagi ilmu</div>
+                <div class="text-sm font-bold text-[#101B35]">Alumni UT</div>
+                <div class="text-[11px] font-normal text-[#68738A] mt-0.5">Telah lulus & siap mentoring</div>
               </div>
               {#if role === 'alumni'}
-                <CheckCircle2 class="w-5 h-5 text-[#18866B] shrink-0" />
+                <CheckCircle2 class="w-5 h-5 text-[#3157D5] shrink-0" />
               {/if}
             </button>
           </div>
           {#if errors.role}
-            <p class="text-xs text-red-600 mt-1">{errors.role}</p>
+            <p class="text-xs text-rose-600 mt-1">{errors.role}</p>
           {/if}
         </div>
 
         <!-- Full Name -->
         <div>
-          <label for="reg-name" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+          <label for="reg-name" class="block text-xs font-bold text-[#101B35] uppercase tracking-wider mb-1.5">
             Nama Lengkap (sesuai data akademis)
           </label>
           <div class="relative">
-            <User class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <User class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input 
               id="reg-name"
               type="text"
               required
               bind:value={fullName}
               placeholder="Contoh: Budi Santoso"
-              class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[#E7E5E0] focus:border-[#183153] text-sm text-gray-900 outline-none transition"
+              class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[#E5E8EF] focus:border-[#3157D5] focus:ring-2 focus:ring-[#3157D5]/15 text-sm text-[#101B35] outline-none transition"
             />
           </div>
           {#if errors.fullName}
-            <p class="text-xs text-red-600 mt-1">{errors.fullName}</p>
+            <p class="text-xs text-rose-600 mt-1">{errors.fullName}</p>
           {/if}
         </div>
 
         <!-- Email -->
         <div>
-          <label for="reg-email" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+          <label for="reg-email" class="block text-xs font-bold text-[#101B35] uppercase tracking-wider mb-1.5">
             Alamat Email
           </label>
           <div class="relative">
-            <Mail class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Mail class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input 
               id="reg-email"
               type="email"
               required
               bind:value={email}
               placeholder="nama@mhs.ut.ac.id atau email aktif Anda"
-              class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[#E7E5E0] focus:border-[#183153] text-sm text-gray-900 outline-none transition"
+              class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[#E5E8EF] focus:border-[#3157D5] focus:ring-2 focus:ring-[#3157D5]/15 text-sm text-[#101B35] outline-none transition"
             />
           </div>
           {#if errors.email}
-            <p class="text-xs text-red-600 mt-1">{errors.email}</p>
+            <p class="text-xs text-rose-600 mt-1">{errors.email}</p>
           {/if}
         </div>
 
         <!-- NIM & Study Program Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label for="reg-nim" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-              {role === 'alumni' ? 'NIM / IKA' : 'NIM Mahasiswa'}
+            <label for="reg-nim" class="block text-xs font-bold text-[#101B35] uppercase tracking-wider mb-1.5">
+              {role === 'alumni' ? 'NIM / No. IKA UT' : 'NIM Mahasiswa'}
             </label>
             <input 
               id="reg-nim"
               type="text"
               required
               bind:value={nim}
-              placeholder={role === 'alumni' ? 'Contoh: 042918274 atau No. IKA UT' : 'Contoh: 042918274'}
-              class="w-full px-4 py-3 rounded-xl bg-white border border-[#E7E5E0] focus:border-[#183153] text-sm text-gray-900 outline-none transition"
+              placeholder={role === 'alumni' ? 'Contoh: 042918274 / No. IKA' : 'Contoh: 042918274'}
+              class="w-full px-4 py-3 rounded-xl bg-white border border-[#E5E8EF] focus:border-[#3157D5] focus:ring-2 focus:ring-[#3157D5]/15 text-sm text-[#101B35] outline-none transition"
             />
             {#if errors.nim}
-              <p class="text-xs text-red-600 mt-1">{errors.nim}</p>
+              <p class="text-xs text-rose-600 mt-1">{errors.nim}</p>
             {/if}
           </div>
 
           <div>
-            <label for="reg-study-program" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+            <label for="reg-study-program" class="block text-xs font-bold text-[#101B35] uppercase tracking-wider mb-1.5">
               Program Studi
             </label>
             <input 
@@ -289,8 +298,8 @@
               required
               bind:value={studyProgram}
               list="program-studi-list"
-              placeholder="Ketik program studi Anda..."
-              class="w-full px-4 py-3 rounded-xl bg-white border border-[#E7E5E0] focus:border-[#183153] text-sm text-gray-900 outline-none transition"
+              placeholder="Ketik prodi Anda..."
+              class="w-full px-4 py-3 rounded-xl bg-white border border-[#E5E8EF] focus:border-[#3157D5] focus:ring-2 focus:ring-[#3157D5]/15 text-sm text-[#101B35] outline-none transition"
             />
             <datalist id="program-studi-list">
               {#each programs as prog}
@@ -298,25 +307,25 @@
               {/each}
             </datalist>
             {#if errors.studyProgram}
-              <p class="text-xs text-red-600 mt-1">{errors.studyProgram}</p>
+              <p class="text-xs text-rose-600 mt-1">{errors.studyProgram}</p>
             {/if}
           </div>
         </div>
 
         <!-- Year (Entry year or Grad year) -->
         <div>
-          <label for="reg-year" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+          <label for="reg-year" class="block text-xs font-bold text-[#101B35] uppercase tracking-wider mb-1.5">
             {role === 'student' ? 'Tahun Masuk Kuliah' : 'Tahun Kelulusan'}
           </label>
           <div class="relative">
-            <Calendar class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Calendar class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input 
               id="reg-year"
               type="number"
               bind:value={year}
               min="1980"
               max="2030"
-              class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[#E7E5E0] focus:border-[#183153] text-sm text-gray-900 outline-none transition"
+              class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[#E5E8EF] focus:border-[#3157D5] focus:ring-2 focus:ring-[#3157D5]/15 text-sm text-[#101B35] outline-none transition"
             />
           </div>
         </div>
@@ -324,42 +333,54 @@
         <!-- Password & Confirm Password -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label for="reg-password" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+            <label for="reg-password" class="block text-xs font-bold text-[#101B35] uppercase tracking-wider mb-1.5">
               Kata Sandi
             </label>
             <div class="relative">
-              <Lock class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input 
                 id="reg-password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 bind:value={password}
                 placeholder="Minimal 6 karakter"
-                class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[#E7E5E0] focus:border-[#183153] text-sm text-gray-900 outline-none transition"
+                class="w-full pl-10 pr-10 py-3 rounded-xl bg-white border border-[#E5E8EF] focus:border-[#3157D5] focus:ring-2 focus:ring-[#3157D5]/15 text-sm text-[#101B35] outline-none transition"
               />
+              <button
+                type="button"
+                onclick={() => showPassword = !showPassword}
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#101B35] transition p-1"
+                aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
+              >
+                {#if showPassword}
+                  <EyeOff class="w-3.5 h-3.5" />
+                {:else}
+                  <Eye class="w-3.5 h-3.5" />
+                {/if}
+              </button>
             </div>
             {#if errors.password}
-              <p class="text-xs text-red-600 mt-1">{errors.password}</p>
+              <p class="text-xs text-rose-600 mt-1">{errors.password}</p>
             {/if}
           </div>
 
           <div>
-            <label for="reg-confirm-password" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+            <label for="reg-confirm-password" class="block text-xs font-bold text-[#101B35] uppercase tracking-wider mb-1.5">
               Konfirmasi Sandi
             </label>
             <div class="relative">
-              <Lock class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input 
                 id="reg-confirm-password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 bind:value={confirmPassword}
                 placeholder="Ulangi sandi"
-                class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[#E7E5E0] focus:border-[#183153] text-sm text-gray-900 outline-none transition"
+                class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-[#E5E8EF] focus:border-[#3157D5] focus:ring-2 focus:ring-[#3157D5]/15 text-sm text-[#101B35] outline-none transition"
               />
             </div>
             {#if errors.confirmPassword}
-              <p class="text-xs text-red-600 mt-1">{errors.confirmPassword}</p>
+              <p class="text-xs text-rose-600 mt-1">{errors.confirmPassword}</p>
             {/if}
           </div>
         </div>
@@ -370,14 +391,14 @@
             <input 
               type="checkbox"
               bind:checked={agreePrivacy}
-              class="w-4 h-4 rounded mt-0.5 text-[#183153] focus:ring-[#183153] border-gray-300"
+              class="w-4 h-4 rounded mt-0.5 text-[#3157D5] focus:ring-[#3157D5] border-[#E5E8EF]"
             />
-            <span class="text-xs text-gray-600 leading-relaxed">
+            <span class="text-xs text-[#68738A] leading-relaxed">
               Saya menyetujui kebijakan privasi serta syarat ketentuan komunitas UT REKA dan menjamin keaslian identitas akademis yang saya daftarkan.
             </span>
           </label>
           {#if errors.agreePrivacy}
-            <p class="text-xs text-red-600 mt-1">{errors.agreePrivacy}</p>
+            <p class="text-xs text-rose-600 mt-1">{errors.agreePrivacy}</p>
           {/if}
         </div>
 
@@ -385,48 +406,49 @@
         <button 
           type="submit"
           disabled={isLoading}
-          class="w-full py-4 px-6 rounded-xl bg-[#FFD43B] hover:bg-[#F2C41D] text-[#183153] font-black text-sm transition shadow-sm flex items-center justify-center gap-2 disabled:opacity-50"
+          class="w-full py-3.5 px-6 rounded-xl bg-[#3157D5] hover:bg-[#2446BD] text-white font-bold text-sm transition shadow-sm shadow-[#3157D5]/25 flex items-center justify-center gap-2 disabled:opacity-50 touch-manipulation min-h-[46px]"
         >
           {#if isLoading}
             <span>Mendaftarkan akun...</span>
           {:else}
             <span>Daftar Sekarang</span>
-            <ArrowRight class="w-4 h-4 stroke-[2.5]" />
+            <ArrowRight class="w-4 h-4" />
           {/if}
         </button>
       </form>
 
-      <div class="mt-8 text-center text-xs text-gray-600">
+      <div class="mt-8 text-center text-xs text-[#68738A]">
         Sudah memiliki akun?{' '}
-        <a href="/login" class="font-bold text-[#183153] hover:underline">
+        <a href="/login" class="font-bold text-[#3157D5] hover:underline">
           Masuk ke akun Anda
         </a>
       </div>
     </div>
 
-    <div class="text-xs text-gray-400 text-center sm:text-left">
-      © 2026 UT REKA. Universitas Terbuka Karier.
+    <div class="text-xs text-[#68738A] text-center sm:text-left">
+      © 2026 UT REKA — Universitas Terbuka Karier.
     </div>
   </div>
 
-  <!-- Right Side: Campus Split Screen -->
-  <div class="hidden lg:block lg:col-span-5 relative bg-[#183153] overflow-hidden">
+  <!-- Right Side: Campus Split Screen Brand Panel -->
+  <div class="hidden lg:block lg:col-span-5 relative bg-[#1E40AF] overflow-hidden">
     <img 
       src="/images/gerbang-ut-landmark.jpg" 
       alt="Gerbang Ikonik Universitas Terbuka" 
-      class="w-full h-full object-cover object-center opacity-85"
+      class="w-full h-full object-cover object-center opacity-75 mix-blend-overlay" 
     />
-    <div class="absolute inset-0 bg-gradient-to-t from-[#183153] via-[#183153]/40 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-[#1E40AF] via-[#1E40AF]/60 to-transparent"></div>
 
     <div class="absolute bottom-16 left-12 right-12 text-white space-y-4">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFD43B] text-[#183153] text-xs font-black uppercase tracking-wider">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 text-[#FEF08A] text-xs font-bold uppercase tracking-wider backdrop-blur-xs">
+        <ShieldCheck class="w-3.5 h-3.5" />
         <span>Jejaring Tanpa Batas</span>
       </div>
       <h2 class="text-3xl font-black font-heading leading-tight">
         Langkah Awal Menuju Masa Depan Gemilang
       </h2>
-      <p class="text-xs text-gray-300 leading-relaxed">
-        Ribuan alumni siap memberikan arahan nyata untuk portofolio, persiapan wawancara kerja, dan membuka jalan kolaborasi proyek.
+      <p class="text-xs text-blue-100 leading-relaxed">
+        Ribuan alumni siap memberikan arahan nyata untuk portofolio, persiapan wawancara kerja, dan membuka jalan kolaborasi proyek bagi mahasiswa Universitas Terbuka.
       </p>
     </div>
   </div>

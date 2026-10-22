@@ -25,25 +25,25 @@
     {
       title: 'Magang Industri & MSIB',
       badge: 'MAGANG',
-      badgeColor: 'bg-emerald-50 text-[#18866B]',
+      badgeColor: 'bg-[#EEF2FF] text-[#3157D5] border border-[#3157D5]/20',
       desc: 'Program magang bersertifikat yang dapat dikonversikan ke SKS perkuliahan. Bekerja langsung pada proyek riil di perusahaan mitra BUMN dan swasta.'
     },
     {
       title: 'Lowongan Fresh Graduate & Pekerja',
       badge: 'FULL-TIME',
-      badgeColor: 'bg-blue-50 text-blue-700',
+      badgeColor: 'bg-blue-50 text-blue-700 border border-blue-200',
       desc: 'Peluang karier bagi alumni baru dan mahasiswa tingkat akhir. Menghargai etos kerja mandiri khas mahasiswa Universitas Terbuka.'
     },
     {
       title: 'Proyek Kolaborasi & Freelance',
       badge: 'PROYEK',
-      badgeColor: 'bg-purple-50 text-purple-700',
+      badgeColor: 'bg-purple-50 text-purple-700 border border-purple-200',
       desc: 'Peluang pekerjaan lepas jarak jauh (remote/online) dari jaringan bisnis alumni. Bangun rekam jejak portofolio profesional sejak masih kuliah.'
     },
     {
       title: 'Program Bimbingan Portofolio',
       badge: 'MENTORING',
-      badgeColor: 'bg-amber-50 text-amber-800',
+      badgeColor: 'bg-amber-50 text-amber-800 border border-amber-200',
       desc: 'Sesi kurasi langsung bersama mentor industri untuk memastikan resume dan portofolio Anda siap bersaing di bursa kerja nasional.'
     }
   ];
@@ -72,33 +72,33 @@
   <title>Peluang Karier & Magang | UT REKA</title>
 </svelte:head>
 
-<div class="min-h-screen bg-[#FAF9F6] text-[#202124] antialiased selection:bg-[#FFD43B] selection:text-[#183153] pb-24 md:pb-16">
+<div class="min-h-screen bg-[#F7F6F2] text-[#20283B] antialiased selection:bg-[#3157D5] selection:text-white pb-24 md:pb-16">
   <!-- Top Header Bar -->
-  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#E7E5E0] px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#E5E8EF] px-4 sm:px-6 h-16 flex items-center justify-between">
     <a 
       href="/" 
-      class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#183153] hover:text-[#18866B] transition touch-manipulation"
+      class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#101B35] hover:text-[#3157D5] transition touch-manipulation"
     >
       <ArrowLeft class="w-4 h-4" />
       <span class="hidden sm:inline">Kembali ke Beranda</span>
     </a>
 
-    <a href="/" title="UT REKA">
-      <img src="/images/ut-reka-logo-transparent.png" alt="UT REKA Relasi Karir" class="h-10 sm:h-12 w-auto object-contain" />
+    <a href="/" title="UT REKA" class="flex items-center gap-2">
+      <img src="/images/ut-reka-logo-transparent.png" alt="UT REKA Relasi Karir" class="h-10 sm:h-11 w-auto object-contain" />
     </a>
 
     <div class="flex items-center gap-2">
       {#if authStore.isAuthenticated}
         <a 
           href="/dashboard/opportunities" 
-          class="px-3.5 py-1.5 rounded-xl bg-[#183153] text-[#FFD43B] text-xs font-bold hover:bg-[#102138] transition touch-manipulation shadow-xs"
+          class="px-4 py-2 rounded-xl bg-[#3157D5] text-white text-xs font-bold hover:bg-[#2646B8] transition touch-manipulation shadow-xs"
         >
           Lihat Semua Lowongan
         </a>
       {:else}
         <a 
           href="/login" 
-          class="px-3.5 py-1.5 rounded-xl bg-[#183153] text-[#FFD43B] text-xs font-bold hover:bg-[#102138] transition touch-manipulation shadow-xs"
+          class="px-4 py-2 rounded-xl bg-[#3157D5] text-white text-xs font-bold hover:bg-[#2646B8] transition touch-manipulation shadow-xs"
         >
           Masuk Akun
         </a>
@@ -108,13 +108,13 @@
 
   <!-- Hero Section -->
   <section class="max-w-4xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-8 space-y-6">
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#183153] via-[#103058] to-[#0d223f] p-6 sm:p-10 text-white shadow-xl border border-[#183153]/50">
-      <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-[#FFD43B]/15 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -left-12 -top-12 w-48 h-48 bg-[#1DB5A0]/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative overflow-hidden rounded-3xl bg-[#101B35] p-6 sm:p-10 text-white shadow-xl border border-[#101B35]/40">
+      <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-[#3157D5]/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-12 -top-12 w-48 h-48 bg-[#5478FF]/20 rounded-full blur-3xl pointer-events-none"></div>
 
       <div class="relative z-10 space-y-4 max-w-2xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold text-[#FFD43B] uppercase tracking-wider">
-          <Briefcase class="w-3.5 h-3.5 text-[#FFD43B]" />
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold text-[#FFC83D] uppercase tracking-wider">
+          <Briefcase class="w-3.5 h-3.5 text-[#FFC83D]" />
           <span>Portal Peluang Karier Resmi</span>
         </div>
 
@@ -122,22 +122,22 @@
           Akselerasi Karier Profesional Bersama Jaringan Industri UT
         </h1>
 
-        <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">
+        <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
           Temukan lowongan magang MSIB, peluang kerja remote, proyek kolaborasi, dan rekrutmen eksklusif yang dibuka khusus oleh mitra industri dan jaringan alumni Universitas Terbuka.
         </p>
 
         <!-- Trust Badges -->
         <div class="flex flex-wrap items-center gap-2 pt-2 text-[11px]">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 text-emerald-300 font-semibold border border-white/10">
-            <Building2 class="w-3.5 h-3.5" />
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 text-white font-medium border border-white/15">
+            <Building2 class="w-3.5 h-3.5 text-[#3157D5]" />
             Mitra Industri & BUMN
           </span>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 text-amber-200 font-semibold border border-white/10">
-            <Globe2 class="w-3.5 h-3.5 text-[#FFD43B]" />
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 text-white font-medium border border-white/15">
+            <Globe2 class="w-3.5 h-3.5 text-[#FFC83D]" />
             Opsi Remote & Fleksibel
           </span>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 text-blue-200 font-semibold border border-white/10">
-            <ShieldCheck class="w-3.5 h-3.5" />
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 text-white font-medium border border-white/15">
+            <ShieldCheck class="w-3.5 h-3.5 text-blue-300" />
             Lowongan Terverifikasi Bebas Biaya
           </span>
         </div>
@@ -146,7 +146,7 @@
         <div class="pt-4 flex flex-wrap items-center gap-3">
           <a 
             href={authStore.isAuthenticated ? '/dashboard/opportunities' : '/register?role=student'}
-            class="px-5 py-3 rounded-2xl bg-[#FFD43B] text-[#183153] text-xs sm:text-sm font-black hover:bg-[#F2C41D] transition shadow-md touch-manipulation flex items-center gap-2"
+            class="px-5 py-3 rounded-2xl bg-[#3157D5] text-white text-xs sm:text-sm font-bold hover:bg-[#2646B8] transition shadow-md touch-manipulation flex items-center gap-2"
           >
             <span>Jelajahi Lowongan Karier</span>
             <ArrowRight class="w-4 h-4" />
@@ -165,24 +165,24 @@
   <!-- 4 Kategori Peluang Karier -->
   <section class="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-6">
     <div class="text-center space-y-1">
-      <h2 class="text-xl sm:text-2xl font-black font-heading text-[#183153]">
+      <h2 class="text-xl sm:text-2xl font-black font-heading text-[#101B35]">
         Kategori Peluang Karier yang Tersedia
       </h2>
-      <p class="text-xs sm:text-sm text-gray-500">
+      <p class="text-xs sm:text-sm text-[#68738A]">
         Dirancang khusus untuk mendukung perkembangan mahasiswa dan alumni UT
       </p>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {#each careerCategories as item}
-        <div class="p-5 rounded-3xl bg-white border border-[#E7E5E0] shadow-xs space-y-3 hover:border-[#183153]/30 transition">
+        <div class="p-5 rounded-3xl bg-white border border-[#E5E8EF] shadow-xs space-y-3 hover:border-[#3157D5]/40 transition">
           <div class="flex items-center justify-between">
             <span class="text-[10px] font-black uppercase px-2.5 py-1 rounded-lg {item.badgeColor}">
               {item.badge}
             </span>
           </div>
-          <h3 class="text-sm font-extrabold text-[#183153]">{item.title}</h3>
-          <p class="text-xs text-gray-600 leading-relaxed">{item.desc}</p>
+          <h3 class="text-sm font-extrabold text-[#101B35]">{item.title}</h3>
+          <p class="text-xs text-[#68738A] leading-relaxed">{item.desc}</p>
         </div>
       {/each}
     </div>
@@ -190,41 +190,41 @@
 
   <!-- Mengapa Mahasiswa UT Dicari Industri? -->
   <section class="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-6">
-    <div class="p-6 sm:p-8 rounded-3xl bg-white border border-[#E7E5E0] shadow-xs space-y-5">
+    <div class="p-6 sm:p-8 rounded-3xl bg-white border border-[#E5E8EF] shadow-xs space-y-5">
       <div class="space-y-1">
-        <span class="text-[11px] font-bold uppercase tracking-wider text-[#18866B]">Nilai Lebih Mahasiswa UT</span>
-        <h2 class="text-xl sm:text-2xl font-black font-heading text-[#183153]">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-[#3157D5]">Nilai Lebih Mahasiswa UT</span>
+        <h2 class="text-xl sm:text-2xl font-black font-heading text-[#101B35]">
           Karakter Mandiri yang Dihargai Perusahaan
         </h2>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <div class="p-4 rounded-2xl bg-[#FAF9F6] border border-[#E7E5E0] space-y-2">
-          <div class="font-extrabold text-[#183153] flex items-center gap-1.5">
-            <CheckCircle2 class="w-4 h-4 text-[#18866B]" />
+        <div class="p-4 rounded-2xl bg-[#F7F6F2] border border-[#E5E8EF] space-y-2">
+          <div class="font-extrabold text-[#101B35] flex items-center gap-1.5">
+            <CheckCircle2 class="w-4 h-4 text-[#3157D5]" />
             <span>Kemandirian Tinggi</span>
           </div>
-          <p class="text-gray-600 leading-relaxed">
-            Mahasiswa UT terbiasa dengan metode *self-directed learning*, memecahkan masalah tanpa perlu supervisi konstan.
+          <p class="text-[#68738A] leading-relaxed">
+            Mahasiswa UT terbiasa dengan metode <em>self-directed learning</em>, memecahkan masalah tanpa perlu supervisi konstan.
           </p>
         </div>
 
-        <div class="p-4 rounded-2xl bg-[#FAF9F6] border border-[#E7E5E0] space-y-2">
-          <div class="font-extrabold text-[#183153] flex items-center gap-1.5">
-            <CheckCircle2 class="w-4 h-4 text-[#18866B]" />
+        <div class="p-4 rounded-2xl bg-[#F7F6F2] border border-[#E5E8EF] space-y-2">
+          <div class="font-extrabold text-[#101B35] flex items-center gap-1.5">
+            <CheckCircle2 class="w-4 h-4 text-[#3157D5]" />
             <span>Manajemen Waktu Teruji</span>
           </div>
-          <p class="text-gray-600 leading-relaxed">
+          <p class="text-[#68738A] leading-relaxed">
             Mampu menyeimbangkan antara komitmen belajar, pekerjaan sehari-hari, dan target profesional secara konsisten.
           </p>
         </div>
 
-        <div class="p-4 rounded-2xl bg-[#FAF9F6] border border-[#E7E5E0] space-y-2">
-          <div class="font-extrabold text-[#183153] flex items-center gap-1.5">
-            <CheckCircle2 class="w-4 h-4 text-[#18866B]" />
+        <div class="p-4 rounded-2xl bg-[#F7F6F2] border border-[#E5E8EF] space-y-2">
+          <div class="font-extrabold text-[#101B35] flex items-center gap-1.5">
+            <CheckCircle2 class="w-4 h-4 text-[#3157D5]" />
             <span>Jaringan Nasional 39 UPBJJ</span>
           </div>
-          <p class="text-gray-600 leading-relaxed">
+          <p class="text-[#68738A] leading-relaxed">
             Perusahaan dapat merekrut talenta lokal berbakat di seluruh kota di Indonesia tanpa batasan geografis.
           </p>
         </div>
@@ -235,25 +235,25 @@
   <!-- FAQ Karier Section -->
   <section class="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-4">
     <div class="text-center space-y-1">
-      <h2 class="text-xl font-black font-heading text-[#183153]">
+      <h2 class="text-xl font-black font-heading text-[#101B35]">
         Pertanyaan Seputar Peluang Karier
       </h2>
-      <p class="text-xs text-gray-500">Informasi seputar magang, rekrutmen, dan tata cara melamar</p>
+      <p class="text-xs text-[#68738A]">Informasi seputar magang, rekrutmen, dan tata cara melamar</p>
     </div>
 
     <div class="space-y-3">
       {#each careerFaqs as item, i}
-        <div class="rounded-2xl bg-white border border-[#E7E5E0] shadow-xs overflow-hidden">
+        <div class="rounded-2xl bg-white border border-[#E5E8EF] shadow-xs overflow-hidden">
           <button 
             type="button"
             onclick={() => openFaq = openFaq === i ? null : i}
-            class="w-full p-4 text-left flex items-center justify-between gap-3 text-xs sm:text-sm font-extrabold text-[#183153] hover:bg-gray-50 transition touch-manipulation"
+            class="w-full p-4 text-left flex items-center justify-between gap-3 text-xs sm:text-sm font-extrabold text-[#101B35] hover:bg-[#F7F6F2] transition touch-manipulation"
           >
             <span>{item.q}</span>
-            <ChevronDown class="w-4 h-4 text-gray-400 shrink-0 transition-transform {openFaq === i ? 'rotate-180' : ''}" />
+            <ChevronDown class="w-4 h-4 text-[#68738A] shrink-0 transition-transform {openFaq === i ? 'rotate-180' : ''}" />
           </button>
           {#if openFaq === i}
-            <div class="px-4 pb-4 pt-1 text-xs text-gray-600 leading-relaxed border-t border-[#FAF9F6]">
+            <div class="px-4 pb-4 pt-1 text-xs text-[#68738A] leading-relaxed border-t border-[#F7F6F2]">
               {item.a}
             </div>
           {/if}
