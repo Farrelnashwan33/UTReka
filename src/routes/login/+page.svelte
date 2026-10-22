@@ -214,23 +214,23 @@
   </div>
 
   <!-- Right Side: Visual Split-Screen Brand Artwork -->
-  <div class="hidden lg:block lg:col-span-6 relative bg-[#1E40AF] overflow-hidden">
+  <div class="hidden lg:block lg:col-span-6 relative bg-[#0F172A] overflow-hidden">
     <img 
-      src="/images/gerbang-ut-landmark.jpg" 
-      alt="Gerbang Ikonik Universitas Terbuka" 
-      class="w-full h-full object-cover object-center opacity-75 mix-blend-overlay" 
+      src="/images/utcc-building-login.jpg" 
+      alt="Gedung Universitas Terbuka Convention Center (UTCC)" 
+      class="w-full h-full object-cover object-center" 
     />
-    <div class="absolute inset-0 bg-linear-to-t from-[#1E40AF] via-[#1E40AF]/60 to-transparent"></div>
+    <div class="absolute inset-0 bg-linear-to-t from-[#0A1120] via-[#0A1120]/60 to-transparent"></div>
 
     <div class="absolute bottom-16 left-16 right-16 text-white space-y-4">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 text-[#FEF08A] text-xs font-bold uppercase tracking-wider backdrop-blur-xs">
         <ShieldCheck class="w-3.5 h-3.5" />
         <span>Ekosistem Karier Terpercaya</span>
       </div>
-      <h2 class="text-3xl font-extrabold font-heading leading-tight">
+      <h2 class="text-3xl font-extrabold font-heading leading-tight drop-shadow-md">
         "Dari Kampus Terbuka, <br />Menuju Karier Tanpa Batas."
       </h2>
-      <p class="text-sm text-blue-100 max-w-md leading-relaxed">
+      <p class="text-sm text-slate-200 max-w-md leading-relaxed drop-shadow-sm">
         Terhubung dengan ribuan alumni yang sukses di industri teknologi, korporasi global, BUMN, dan pemerintahan di seluruh Indonesia.
       </p>
     </div>
