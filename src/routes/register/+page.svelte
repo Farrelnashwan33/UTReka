@@ -431,23 +431,23 @@
   </div>
 
   <!-- Right Side: Campus Split Screen Brand Panel -->
-  <div class="hidden lg:block lg:col-span-5 relative bg-[#1E40AF] overflow-hidden">
+  <div class="hidden lg:block lg:col-span-5 relative bg-[#0F172A] overflow-hidden">
     <img 
-      src="/images/gerbang-ut-landmark.jpg" 
-      alt="Gerbang Ikonik Universitas Terbuka" 
-      class="w-full h-full object-cover object-center opacity-75 mix-blend-overlay" 
+      src="/images/utcc-mahasiswa-register.png" 
+      alt="Universitas Terbuka Convention Center UTCC dan Mahasiswa UT" 
+      class="w-full h-full object-cover object-center" 
     />
-    <div class="absolute inset-0 bg-linear-to-t from-[#1E40AF] via-[#1E40AF]/60 to-transparent"></div>
+    <div class="absolute inset-0 bg-linear-to-t from-[#0F172A] via-[#0F172A]/50 to-transparent"></div>
 
     <div class="absolute bottom-16 left-12 right-12 text-white space-y-4">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 text-[#FEF08A] text-xs font-bold uppercase tracking-wider backdrop-blur-xs">
-        <ShieldCheck class="w-3.5 h-3.5" />
-        <span>Jejaring Tanpa Batas</span>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 border border-white/30 text-[#FEF08A] text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-xs">
+        <ShieldCheck class="w-3.5 h-3.5 text-[#FEF08A]" />
+        <span>Jejaring Mahasiswa & Alumni UT</span>
       </div>
-      <h2 class="text-3xl font-black font-heading leading-tight">
+      <h2 class="text-3xl font-black font-heading leading-tight drop-shadow-sm">
         Langkah Awal Menuju Masa Depan Gemilang
       </h2>
-      <p class="text-xs text-blue-100 leading-relaxed">
+      <p class="text-xs text-slate-200 leading-relaxed font-normal">
         Ribuan alumni siap memberikan arahan nyata untuk portofolio, persiapan wawancara kerja, dan membuka jalan kolaborasi proyek bagi mahasiswa Universitas Terbuka.
       </p>
     </div>
