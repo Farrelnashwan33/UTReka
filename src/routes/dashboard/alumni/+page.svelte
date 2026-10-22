@@ -3,7 +3,7 @@
   import { authStore } from '$lib/stores/auth.svelte';
   import { platformService } from '$lib/supabase/service';
   import { toastStore } from '$lib/stores/toast.svelte';
-  import type { ConnectionRequest, Opportunity } from '$lib/types/database';
+  import type { ConnectionRequest, Opportunity, CommunityGroup, GroupCategory } from '$lib/types/database';
   import { 
     Users, 
     MessageSquare, 
@@ -57,6 +57,75 @@
     return requests;
   });
 
+  // Community Groups states for Alumni
+  let groups = $state<CommunityGroup[]>([]);
+  let groupFilter = $state<'all' | 'joined' | 'mentoring' | 'alumni' | 'karier'>('all');
+  let isCreateGroupModalOpen = $state(false);
+  let isCreatingGroup = $state(false);
+  let newGroupName = $state('');
+  let newGroupDesc = $state('');
+  let newGroupCategory = $state<GroupCategory>('mentoring');
+  let newGroupMaxMembers = $state(50);
+  let newGroupProdi = $state(authStore.profile?.study_program || 'Sistem Informasi');
+
+  let filteredGroups = $derived.by(() => {
+    if (groupFilter === 'joined' && authStore.profile) {
+      return groups.filter(g => g.member_ids.includes(authStore.profile!.id));
+    }
+    if (groupFilter === 'mentoring') return groups.filter(g => g.category === 'mentoring');
+    if (groupFilter === 'alumni') return groups.filter(g => g.category === 'alumni');
+    if (groupFilter === 'karier') return groups.filter(g => g.category === 'karier' || g.category === 'proyek');
+    return groups;
+  });
+
+  async function handleCreateGroup(e: SubmitEvent) {
+    e.preventDefault();
+    if (!authStore.profile) {
+      toastStore.error('Silakan login terlebih dahulu');
+      return;
+    }
+    if (!newGroupName.trim()) {
+      toastStore.warning('Nama grup tidak boleh kosong');
+      return;
+    }
+
+    isCreatingGroup = true;
+    const res = await platformService.createGroup({
+      name: newGroupName,
+      description: newGroupDesc,
+      category: newGroupCategory,
+      creator_id: authStore.profile.id,
+      creator_role: authStore.profile.role,
+      study_program: newGroupProdi,
+      max_members: newGroupMaxMembers,
+      creator: authStore.profile
+    });
+    isCreatingGroup = false;
+
+    if (res.success && res.group) {
+      toastStore.success(`Grup "${res.group.name}" berhasil dibuat!`);
+      groups = [res.group, ...groups];
+      newGroupName = '';
+      newGroupDesc = '';
+      isCreateGroupModalOpen = false;
+    } else {
+      toastStore.error(res.error || 'Gagal membuat grup');
+    }
+  }
+
+  async function handleToggleJoinGroup(groupId: string) {
+    if (!authStore.profile) return;
+    const res = await platformService.toggleJoinGroup(groupId, authStore.profile.id);
+    if (res.success) {
+      groups = await platformService.getGroups();
+      if (res.isMember) {
+        toastStore.success('Berhasil bergabung ke grup!');
+      } else {
+        toastStore.info('Anda telah keluar dari grup');
+      }
+    }
+  }
+
   onMount(async () => {
     isLoading = true;
     try {
@@ -66,12 +135,14 @@
           mentorTopics = authStore.profile.mentor_topics;
         }
 
-        const [reqs, opps] = await Promise.all([
+        const [reqs, opps, grps] = await Promise.all([
           platformService.getConnectionRequests(authStore.profile.id),
-          platformService.getOpportunities()
+          platformService.getOpportunities(),
+          platformService.getGroups()
         ]);
         requests = reqs.filter(r => r.receiver_id === authStore.profile?.id);
         myOpportunities = opps.filter(o => o.author_id === authStore.profile?.id);
+        groups = grps;
       }
     } catch (e) {
       console.warn('Alumni dashboard load error:', e);
@@ -493,6 +564,153 @@
       </div>
     </div>
   </div>
+
+  <!-- ========================================================
+       SECTION: GRUP MENTORING & KOMUNITAS ALUMNI
+       ======================================================== -->
+  <div class="p-6 sm:p-7 rounded-3xl bg-white border border-[#E5E8EF] shadow-2xs space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E8EF] pb-5">
+      <div>
+        <div class="inline-flex items-center gap-1.5 text-xs font-bold text-[#3157D5] bg-[#EEF2FF] px-2.5 py-0.5 rounded-full mb-1">
+          <Users class="w-3.5 h-3.5" />
+          <span>Jejaring Kolaborasi</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-black text-[#101B35] font-heading">
+          Grup Mentoring & Komunitas Alumni
+        </h2>
+        <p class="text-xs text-[#68738A] mt-0.5 max-w-xl">
+          Buka kelompok bimbingan karier tematik, ruang sharing alumni, atau forum diskusi prodi.
+        </p>
+      </div>
+
+      <button 
+        type="button"
+        onclick={() => isCreateGroupModalOpen = true}
+        class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#3157D5] hover:bg-[#2446BD] text-white text-xs sm:text-sm font-bold shadow-md shadow-[#3157D5]/20 transition touch-manipulation self-start sm:self-center"
+      >
+        <Plus class="w-4 h-4" />
+        <span>+ Bikin Grup Baru</span>
+      </button>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-bold text-[#68738A]">
+      <button 
+        type="button" 
+        onclick={() => groupFilter = 'all'}
+        class="px-3.5 py-1.5 rounded-xl transition {groupFilter === 'all' ? 'bg-[#101B35] text-white shadow-xs' : 'bg-[#F7F6F2] hover:bg-slate-200 text-[#101B35]'}"
+      >
+        Semua Grup ({groups.length})
+      </button>
+      <button 
+        type="button" 
+        onclick={() => groupFilter = 'joined'}
+        class="px-3.5 py-1.5 rounded-xl transition {groupFilter === 'joined' ? 'bg-[#101B35] text-white shadow-xs' : 'bg-[#F7F6F2] hover:bg-slate-200 text-[#101B35]'}"
+      >
+        Grup Saya ({groups.filter(g => authStore.profile && g.member_ids.includes(authStore.profile.id)).length})
+      </button>
+      <button 
+        type="button" 
+        onclick={() => groupFilter = 'mentoring'}
+        class="px-3.5 py-1.5 rounded-xl transition {groupFilter === 'mentoring' ? 'bg-[#101B35] text-white shadow-xs' : 'bg-[#F7F6F2] hover:bg-slate-200 text-[#101B35]'}"
+      >
+        Grup Mentoring
+      </button>
+      <button 
+        type="button" 
+        onclick={() => groupFilter = 'alumni'}
+        class="px-3.5 py-1.5 rounded-xl transition {groupFilter === 'alumni' ? 'bg-[#101B35] text-white shadow-xs' : 'bg-[#F7F6F2] hover:bg-slate-200 text-[#101B35]'}"
+      >
+        Komunitas Alumni
+      </button>
+      <button 
+        type="button" 
+        onclick={() => groupFilter = 'karier'}
+        class="px-3.5 py-1.5 rounded-xl transition {groupFilter === 'karier' ? 'bg-[#101B35] text-white shadow-xs' : 'bg-[#F7F6F2] hover:bg-slate-200 text-[#101B35]'}"
+      >
+        Karier & Industri
+      </button>
+    </div>
+
+    <!-- Groups Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {#each filteredGroups as group (group.id)}
+        <div class="p-5 rounded-2xl bg-[#F8FAFC] border border-[#E5E8EF] hover:border-[#3157D5]/40 hover:bg-white transition-all space-y-3.5 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full
+                {group.category === 'mentoring' ? 'bg-amber-50 text-amber-700 border border-amber-200' : 
+                 group.category === 'alumni' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
+                 group.category === 'karier' || group.category === 'proyek' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                 'bg-emerald-50 text-emerald-700 border border-emerald-200'}">
+                {group.category === 'mentoring' ? 'Mentoring' :
+                 group.category === 'alumni' ? 'Komunitas Alumni' :
+                 group.category === 'karier' ? 'Karier & Industri' :
+                 group.category === 'proyek' ? 'Proyek Kolaboratif' :
+                 group.category === 'prodi' ? 'Prodi UT' : 'Grup Terbuka'}
+              </span>
+              
+              <span class="text-[11px] font-semibold text-[#64748B] flex items-center gap-1">
+                <Users class="w-3.5 h-3.5 text-[#3157D5]" />
+                <span>{group.members_count} / {group.max_members || 100} anggota</span>
+              </span>
+            </div>
+
+            <h3 class="text-base font-extrabold text-[#101B35] font-heading leading-snug">
+              {group.name}
+            </h3>
+            <p class="text-xs text-[#68738A] line-clamp-2 leading-relaxed">
+              {group.description}
+            </p>
+          </div>
+
+          <!-- Footer: Creator info + Action Button -->
+          <div class="pt-3 border-t border-[#E5E8EF] flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2 min-w-0">
+              <img 
+                src={group.creator?.avatar_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80'} 
+                alt={group.creator?.full_name || 'Inisiator'} 
+                class="w-7 h-7 rounded-lg object-cover ring-1 ring-slate-200 shrink-0 bg-white"
+              />
+              <div class="text-[11px] truncate">
+                <span class="text-[#68738A]">Oleh: </span>
+                <span class="font-bold text-[#101B35]">{group.creator?.full_name || 'Alumni IKA UT'}</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-1.5 shrink-0">
+              {#if authStore.profile && group.member_ids.includes(authStore.profile.id)}
+                <a 
+                  href="/dashboard/messages"
+                  class="px-3 py-1.5 rounded-xl bg-[#EEF2FF] hover:bg-[#DBEAFE] text-[#3157D5] font-bold text-xs flex items-center gap-1 transition"
+                >
+                  <MessageSquare class="w-3.5 h-3.5" />
+                  <span>Buka Obrolan</span>
+                </a>
+                <button 
+                  type="button"
+                  onclick={() => handleToggleJoinGroup(group.id)}
+                  class="p-1.5 text-slate-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition"
+                  title="Keluar dari grup"
+                >
+                  <X class="w-3.5 h-3.5" />
+                </button>
+              {:else}
+                <button 
+                  type="button"
+                  onclick={() => handleToggleJoinGroup(group.id)}
+                  class="px-3.5 py-1.5 rounded-xl bg-white border border-[#CBD5E1] hover:border-[#3157D5] text-[#101B35] hover:text-[#3157D5] font-bold text-xs flex items-center gap-1 transition shadow-xs touch-manipulation"
+                >
+                  <Plus class="w-3.5 h-3.5" />
+                  <span>Gabung Grup</span>
+                </button>
+              {/if}
+            </div>
+          </div>
+        </div>
+      {/each}
+    </div>
+  </div>
 </div>
 
 <!-- Modal: Buat Peluang Baru -->
@@ -603,6 +821,121 @@
             class="px-5 py-2.5 rounded-xl bg-[#3157D5] text-white font-bold hover:bg-[#2646B8] transition touch-manipulation shadow-xs"
           >
             Publikasikan Peluang
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{/if}
+
+<!-- Modal: Bikin Grup Mentoring / Komunitas Baru -->
+{#if isCreateGroupModalOpen}
+  <div 
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-150"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-[#E2E8F0] overflow-hidden flex flex-col max-h-[90vh]">
+      <!-- Header -->
+      <div class="px-6 py-4.5 border-b border-[#E2E8F0] flex items-center justify-between bg-slate-50/70">
+        <div class="flex items-center gap-2.5">
+          <div class="p-2 bg-[#EEF2FF] text-[#3157D5] rounded-xl border border-[#D5E0FF]">
+            <Users class="w-5 h-5" />
+          </div>
+          <div>
+            <h3 class="text-base font-black text-[#101B35] font-heading">Bikin Grup Mentoring / Komunitas</h3>
+            <p class="text-xs text-[#68738A]">Buka ruang bimbingan atau jaringan sesama alumni UT</p>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          onclick={() => isCreateGroupModalOpen = false}
+          class="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition"
+        >
+          <X class="w-5 h-5" />
+        </button>
+      </div>
+
+      <!-- Form -->
+      <form onsubmit={handleCreateGroup} class="p-6 overflow-y-auto space-y-4 text-xs">
+        <div>
+          <label for="alumni-grp-name" class="block font-bold text-[#101B35] uppercase mb-1">Nama Grup</label>
+          <input 
+            id="alumni-grp-name"
+            type="text"
+            required
+            bind:value={newGroupName}
+            placeholder="Contoh: Mentoring Karier IT & Persiapan BUMN 2026"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#CBD5E1] text-[#101B35] outline-none focus:border-[#3157D5] focus:ring-1 focus:ring-[#3157D5]/20 bg-white"
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="alumni-grp-cat" class="block font-bold text-[#101B35] uppercase mb-1">Kategori</label>
+            <select 
+              id="alumni-grp-cat"
+              bind:value={newGroupCategory}
+              class="w-full px-3 py-2.5 rounded-xl border border-[#CBD5E1] text-[#101B35] outline-none focus:border-[#3157D5] bg-white font-medium"
+            >
+              <option value="mentoring">Grup Mentoring Tematik</option>
+              <option value="alumni">Komunitas Alumni IKA UT</option>
+              <option value="karier">Karier & Lowongan Kerja</option>
+              <option value="prodi">Fakultas / Prodi Khusus</option>
+              <option value="upbjj">Jejaring Daerah / UPBJJ</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="alumni-grp-prodi" class="block font-bold text-[#101B35] uppercase mb-1">Fokus Bidang / Prodi</label>
+            <input 
+              id="alumni-grp-prodi"
+              type="text"
+              bind:value={newGroupProdi}
+              placeholder="Contoh: Sistem Informasi / Semua"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-[#CBD5E1] text-[#101B35] outline-none focus:border-[#3157D5] bg-white"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="alumni-grp-desc" class="block font-bold text-[#101B35] uppercase mb-1">Deskripsi & Target Bimbingan</label>
+          <textarea 
+            id="alumni-grp-desc"
+            rows="3"
+            required
+            bind:value={newGroupDesc}
+            placeholder="Jelaskan topik yang akan dipelajari, silabus diskusi, atau kriteria peserta..."
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#CBD5E1] text-[#101B35] outline-none focus:border-[#3157D5] focus:ring-1 focus:ring-[#3157D5]/20 bg-white leading-relaxed"
+          ></textarea>
+        </div>
+
+        <div>
+          <label for="alumni-grp-max" class="block font-bold text-[#101B35] uppercase mb-1">Kapasitas Maksimal Anggota</label>
+          <input 
+            id="alumni-grp-max"
+            type="number"
+            min="5"
+            max="500"
+            bind:value={newGroupMaxMembers}
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#CBD5E1] text-[#101B35] outline-none focus:border-[#3157D5] bg-white"
+          />
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-3 border-t border-[#E5E8EF]">
+          <button 
+            type="button" 
+            onclick={() => isCreateGroupModalOpen = false}
+            class="px-4 py-2.5 rounded-xl border border-slate-300 font-bold text-slate-700 hover:bg-slate-100 transition"
+          >
+            Batal
+          </button>
+          <button 
+            type="submit"
+            disabled={isCreatingGroup}
+            class="px-5 py-2.5 rounded-xl bg-[#3157D5] hover:bg-[#2446BD] text-white font-bold transition shadow-xs disabled:opacity-50"
+          >
+            {isCreatingGroup ? 'Menerbitkan Grup...' : 'Terbitkan Grup'}
           </button>
         </div>
       </form>

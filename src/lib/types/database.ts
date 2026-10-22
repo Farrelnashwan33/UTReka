@@ -164,3 +164,22 @@ export interface AuditLogItem {
   created_at: string;
   admin?: Profile;
 }
+
+export type GroupCategory = 'belajar' | 'karier' | 'prodi' | 'proyek' | 'mentoring' | 'alumni' | 'upbjj';
+
+export interface CommunityGroup {
+  id: string;
+  name: string;
+  description: string;
+  category: GroupCategory;
+  creator_id: string;
+  creator_role: UserRole;
+  study_program?: string;
+  avatar_url?: string;
+  max_members?: number;
+  members_count: number;
+  member_ids: string[];
+  created_at: string;
+  updated_at: string;
+  creator?: Profile;
+}

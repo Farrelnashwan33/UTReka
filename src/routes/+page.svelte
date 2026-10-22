@@ -232,7 +232,7 @@
   <!-- ========================================================
        HERO WRAPPER: LUMINOUS WARM ACADEMIC UT STAGE
        ======================================================== -->
-  <div class="relative bg-gradient-to-b from-[#EFF6FF] via-[#FAF9F5] to-[#FBFBFA] text-[#0F172A] overflow-hidden pb-12 sm:pb-16 lg:pb-20 border-b border-[#E2E8F0]">
+  <div class="relative bg-linear-to-b from-[#EFF6FF] via-[#FAF9F5] to-[#FBFBFA] text-[#0F172A] overflow-hidden pb-12 sm:pb-16 lg:pb-20 border-b border-[#E2E8F0]">
     
     <!-- Soft Warm Ambient Radial Glow Behind Hero -->
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] pointer-events-none -z-0">
@@ -400,7 +400,7 @@
       <!-- Main Headline: "Bangun Relasi. Wujudkan Masa Depan" -->
       <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.08] font-heading text-[#0F172A] max-w-4xl mx-auto">
         Bangun Relasi.<br />
-        <span class="bg-gradient-to-r from-[#1E40AF] via-[#2563EB] to-[#1D4ED8] bg-clip-text text-transparent">
+        <span class="bg-linear-to-r from-[#1E40AF] via-electric-blue to-[#1D4ED8] bg-clip-text text-transparent">
           Wujudkan Masa Depan
         </span>
       </h1>
@@ -414,13 +414,13 @@
       <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md sm:max-w-none mx-auto">
         <a 
           href={authStore.isAuthenticated ? "/dashboard/student" : "/register"}
-          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[#1E40AF] hover:bg-[#1D4ED8] text-white text-sm sm:text-base font-bold transition shadow-lg shadow-[#1E40AF]/25 active:scale-95 min-h-[48px]"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[#1E40AF] hover:bg-[#1D4ED8] text-white text-sm sm:text-base font-bold transition shadow-lg shadow-[#1E40AF]/25 active:scale-95 min-h-12"
         >
           <span>Mulai Perjalanan</span>
         </a>
         <a 
           href="/mentor"
-          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-[#CBD5E1] text-[#0F172A] text-sm sm:text-base font-bold transition shadow-xs active:scale-95 min-h-[48px]"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-[#CBD5E1] text-[#0F172A] text-sm sm:text-base font-bold transition shadow-xs active:scale-95 min-h-12"
         >
           <span>Konsultasi Karier Gratis</span>
         </a>
@@ -923,7 +923,7 @@
          CALL TO ACTION BANNER (UT Royal Blue & Warm Gold Glow)
          ======================================================== -->
     <section class="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <div class="relative bg-gradient-to-br from-[#1E40AF] via-[#1D4ED8] to-[#1E3A8A] text-white rounded-3xl p-8 sm:p-14 text-center shadow-xl overflow-hidden border border-[#3B82F6]/30">
+      <div class="relative bg-linear-to-br from-[#1E40AF] via-[#1D4ED8] to-[#1E3A8A] text-white rounded-3xl p-8 sm:p-14 text-center shadow-xl overflow-hidden border border-[#3B82F6]/30">
         
         <!-- Subtle Decorative Radial Gradients -->
         <div class="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
@@ -942,14 +942,14 @@
           <div class="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 max-w-sm sm:max-w-none mx-auto w-full">
             <a 
               href="/register" 
-              class="px-6 py-3.5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] text-[#0F172A] font-extrabold text-xs sm:text-sm transition shadow-lg shadow-[#F59E0B]/25 touch-manipulation min-h-[46px] flex items-center justify-center gap-2 active:scale-95"
+              class="px-6 py-3.5 rounded-xl bg-[#F59E0B] hover:bg-ut-yellow-hover text-[#0F172A] font-extrabold text-xs sm:text-sm transition shadow-lg shadow-[#F59E0B]/25 touch-manipulation min-h-11.5 flex items-center justify-center gap-2 active:scale-95"
             >
               <span>Daftar Akun Mahasiswa / Alumni</span>
               <ArrowRight class="w-4 h-4" />
             </a>
             <a 
               href="/login" 
-              class="px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white font-bold text-xs sm:text-sm transition touch-manipulation min-h-[46px] flex items-center justify-center active:scale-95"
+              class="px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white font-bold text-xs sm:text-sm transition touch-manipulation min-h-11.5 flex items-center justify-center active:scale-95"
             >
               Masuk ke Akun
             </a>

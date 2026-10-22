@@ -264,7 +264,7 @@
 
   <!-- Helpdesk & Kontak -->
   <section class="max-w-4xl mx-auto px-4 sm:px-6 py-6">
-    <div class="p-6 rounded-3xl bg-gradient-to-r from-[#1E40AF] via-[#1D4ED8] to-[#1E3A8A] text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-4 border border-[#3B82F6]/30">
+    <div class="p-6 rounded-3xl bg-linear-to-r from-[#1E40AF] via-[#1D4ED8] to-[#1E3A8A] text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-4 border border-[#3B82F6]/30">
       <div class="space-y-1 text-center sm:text-left">
         <h3 class="text-base font-extrabold font-heading text-white">Butuh Bantuan Lebih Lanjut?</h3>
         <p class="text-xs text-blue-100">Tim pengelola layanan UT REKA siap membantu kendala teknis Anda.</p>

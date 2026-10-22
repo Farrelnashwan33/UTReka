@@ -173,7 +173,7 @@
 <div class="min-h-screen bg-[#FBFBFA] p-3 sm:p-5 lg:p-8 antialiased selection:bg-[#1E40AF] selection:text-white">
   <div class="max-w-7xl mx-auto space-y-5 sm:space-y-6 pb-28 md:pb-12">
     <!-- Top Nav Header: Responsive for Mobile & Desktop -->
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1E40AF] via-[#1D4ED8] to-[#1E3A8A] p-5 sm:p-6 lg:p-7 text-white shadow-md border border-[#3B82F6]/30">
+    <div class="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#1E40AF] via-[#1D4ED8] to-[#1E3A8A] p-5 sm:p-6 lg:p-7 text-white shadow-md border border-[#3B82F6]/30">
       <div class="absolute -right-8 -bottom-8 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">

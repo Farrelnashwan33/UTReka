@@ -341,5 +341,21 @@ export const authStore = {
       }
       toastStore.success(`Beralih ke akun demo: ${target.full_name} (${target.role})`);
     }
+  },
+
+  async updateProfile(updates: Partial<Profile>): Promise<{ success: boolean; error?: string }> {
+    if (!authState.profile) return { success: false, error: 'User tidak ditemukan' };
+    const updated: Profile = {
+      ...authState.profile,
+      ...updates,
+      updated_at: new Date().toISOString()
+    };
+    authState.profile = updated;
+    const res = await platformService.updateProfile(updated.id, updates);
+    return res;
+  },
+
+  async updateAvatar(avatarUrl: string): Promise<{ success: boolean; error?: string }> {
+    return this.updateProfile({ avatar_url: avatarUrl });
   }
 };

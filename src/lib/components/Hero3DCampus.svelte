@@ -30,11 +30,11 @@
   class="relative w-full aspect-4/3 sm:aspect-16/11 lg:aspect-square max-w-xl mx-auto perspective-1000 select-none group"
 >
   <!-- Background Glow & Grid Ornaments -->
-  <div class="absolute -inset-4 bg-gradient-to-tr from-[#3157D5]/20 via-[#101B35]/10 to-transparent rounded-3xl blur-2xl -z-10"></div>
+  <div class="absolute -inset-4 bg-linear-to-tr from-[#3157D5]/20 via-[#101B35]/10 to-transparent rounded-3xl blur-2xl -z-10"></div>
   
   <!-- 3D Transform Main Stage -->
   <div 
-    class="w-full h-full relative rounded-3xl overflow-hidden border border-[#E5E8EF] shadow-2xl bg-gradient-to-b from-[#101B35] to-[#1A2E56] transition-transform duration-200 ease-out"
+    class="w-full h-full relative rounded-3xl overflow-hidden border border-[#E5E8EF] shadow-2xl bg-linear-to-b from-[#101B35] to-[#1A2E56] transition-transform duration-200 ease-out"
     style="transform: rotateX({rotateX}deg) rotateY({rotateY}deg); transform-style: preserve-3d;"
   >
     <!-- Actual Campus Photograph with Architectural Blend -->
@@ -46,8 +46,8 @@
     />
 
     <!-- Gradient Sheen Overlays -->
-    <div class="absolute inset-0 bg-gradient-to-t from-[#101B35] via-[#101B35]/50 to-transparent"></div>
-    <div class="absolute inset-0 bg-gradient-to-r from-[#101B35]/70 via-transparent to-[#101B35]/40"></div>
+    <div class="absolute inset-0 bg-linear-to-t from-[#101B35] via-[#101B35]/50 to-transparent"></div>
+    <div class="absolute inset-0 bg-linear-to-r from-[#101B35]/70 via-transparent to-[#101B35]/40"></div>
 
     <!-- 3D Campus Architectural & Geometric Wireframe Accents -->
     <div class="absolute inset-0 pointer-events-none opacity-20">
@@ -62,8 +62,8 @@
     </div>
 
     <!-- Digital Connection Beams -->
-    <div class="absolute top-1/4 left-1/3 w-32 h-0.5 bg-gradient-to-r from-transparent via-[#FFC83D] to-transparent transform -rotate-45 animate-pulse"></div>
-    <div class="absolute top-2/3 right-1/4 w-40 h-0.5 bg-gradient-to-r from-transparent via-[#3157D5] to-transparent transform rotate-12 animate-pulse"></div>
+    <div class="absolute top-1/4 left-1/3 w-32 h-0.5 bg-linear-to-r from-transparent via-[#FFC83D] to-transparent transform -rotate-45 animate-pulse"></div>
+    <div class="absolute top-2/3 right-1/4 w-40 h-0.5 bg-linear-to-r from-transparent via-[#3157D5] to-transparent transform rotate-12 animate-pulse"></div>
 
     <!-- Center Badge: Universitas Terbuka Karier Hub -->
     <div class="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-white/95 backdrop-blur-md border border-white/40 shadow-xl text-left">

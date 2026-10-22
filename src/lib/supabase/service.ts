@@ -23,12 +23,108 @@ import type {
   AuditLogItem, 
   ConnectionRequestStatus, 
   VerificationStatus, 
-  ReportStatus 
+  ReportStatus,
+  CommunityGroup,
+  GroupCategory 
 } from '$lib/types/database';
 
 const PROFILES_STORAGE_KEY = 'ut_reka_custom_profiles';
 const ACCOUNTS_STORAGE_KEY = 'ut_reka_registered_accounts';
 const VERIF_STORAGE_KEY = 'ut_reka_custom_verifications';
+const GROUPS_STORAGE_KEY = 'ut_reka_community_groups';
+
+const initialMockGroups: CommunityGroup[] = [
+  {
+    id: 'grp-1',
+    name: 'Komunitas Sistem Informasi UT Nasional',
+    description: 'Forum resmi diskusi kurikulum, proyek kuliah, dan jejaring antarmahasiswa Sistem Informasi UT seluruh Indonesia.',
+    category: 'prodi',
+    creator_id: 'user-1',
+    creator_role: 'student',
+    study_program: 'Sistem Informasi',
+    max_members: 250,
+    members_count: 142,
+    member_ids: ['user-1', 'user-2', 'user-3'],
+    created_at: '2026-09-15T08:00:00Z',
+    updated_at: '2026-10-20T10:00:00Z',
+    creator: mockProfiles[0]
+  },
+  {
+    id: 'grp-2',
+    name: 'Mentoring Akselerasi Karier Tech & Product',
+    description: 'Kelompok bimbingan intensif portofolio, mock interview, dan insight industri teknologi bersama alumni IKA UT.',
+    category: 'mentoring',
+    creator_id: 'user-2',
+    creator_role: 'alumni',
+    study_program: 'Sistem Informasi',
+    max_members: 60,
+    members_count: 48,
+    member_ids: ['user-2', 'user-1'],
+    created_at: '2026-09-20T09:00:00Z',
+    updated_at: '2026-10-21T12:00:00Z',
+    creator: mockProfiles[1]
+  },
+  {
+    id: 'grp-3',
+    name: 'Frontend & Fullstack Developers UT',
+    description: 'Study group eksplorasi SvelteKit, TypeScript, React, dan persiapan proyek riil portofolio siap kerja.',
+    category: 'proyek',
+    creator_id: 'user-1',
+    creator_role: 'student',
+    study_program: 'Sistem Informasi',
+    max_members: 100,
+    members_count: 67,
+    member_ids: ['user-1', 'user-3'],
+    created_at: '2026-09-25T11:00:00Z',
+    updated_at: '2026-10-18T14:00:00Z',
+    creator: mockProfiles[0]
+  },
+  {
+    id: 'grp-4',
+    name: 'Jejaring Alumni UT Wilayah Jabodetabek & BUMN',
+    description: 'Wadah silaturahmi, sharing lowongan kerja, dan kolaborasi bisnis antaralumni Universitas Terbuka.',
+    category: 'alumni',
+    creator_id: 'user-3',
+    creator_role: 'alumni',
+    study_program: 'Ilmu Komunikasi',
+    max_members: 300,
+    members_count: 185,
+    member_ids: ['user-3'],
+    created_at: '2026-09-10T14:00:00Z',
+    updated_at: '2026-10-19T09:00:00Z',
+    creator: mockProfiles[2]
+  }
+];
+
+export function getStoredGroups(): CommunityGroup[] {
+  if (typeof window === 'undefined') return initialMockGroups;
+  try {
+    const raw = localStorage.getItem(GROUPS_STORAGE_KEY);
+    if (!raw) {
+      localStorage.setItem(GROUPS_STORAGE_KEY, JSON.stringify(initialMockGroups));
+      return initialMockGroups;
+    }
+    return JSON.parse(raw) as CommunityGroup[];
+  } catch (e) {
+    return initialMockGroups;
+  }
+}
+
+export function saveStoredGroup(group: CommunityGroup): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const list = getStoredGroups();
+    const idx = list.findIndex(g => g.id === group.id);
+    if (idx >= 0) {
+      list[idx] = group;
+    } else {
+      list.unshift(group);
+    }
+    localStorage.setItem(GROUPS_STORAGE_KEY, JSON.stringify(list));
+  } catch (e) {
+    console.warn('saveStoredGroup error:', e);
+  }
+}
 
 export interface RegisteredAccount {
   email: string;
@@ -234,12 +330,57 @@ export const platformService = {
     const foundLocal = localProfiles.find(p => p.id === userId);
     if (foundLocal) {
       saveStoredCustomProfile({ ...foundLocal, ...updates, updated_at: new Date().toISOString() });
+    } else {
+      const base = inMemoryProfiles.find(p => p.id === userId) || mockProfiles.find(p => p.id === userId);
+      if (base) {
+        saveStoredCustomProfile({ ...base, ...updates, updated_at: new Date().toISOString() });
+      }
     }
 
     const idx = inMemoryProfiles.findIndex(p => p.id === userId);
     if (idx !== -1) {
       inMemoryProfiles[idx] = { ...inMemoryProfiles[idx], ...updates, updated_at: new Date().toISOString() };
     }
+
+    const mockIdx = mockProfiles.findIndex(p => p.id === userId);
+    if (mockIdx !== -1) {
+      mockProfiles[mockIdx] = { ...mockProfiles[mockIdx], ...updates, updated_at: new Date().toISOString() };
+    }
+
+    // Two-way synchronization: ensure other users immediately see updated avatar & details
+    if (typeof window !== 'undefined') {
+      try {
+        const localGroups = getStoredGroups();
+        let grpUpdated = false;
+        for (let i = 0; i < localGroups.length; i++) {
+          if (localGroups[i].creator_id === userId && localGroups[i].creator) {
+            localGroups[i].creator = { ...localGroups[i].creator, ...updates } as Profile;
+            grpUpdated = true;
+          }
+        }
+        if (grpUpdated) {
+          localStorage.setItem(GROUPS_STORAGE_KEY, JSON.stringify(localGroups));
+        }
+      } catch (err) {
+        console.warn('Sync groups avatar notice:', err);
+      }
+    }
+
+    // Sync in-memory requests and opportunities for other users viewing them
+    for (const r of inMemoryRequests) {
+      if (r.sender_id === userId && r.sender) {
+        r.sender = { ...r.sender, ...updates };
+      }
+      if (r.receiver_id === userId && r.receiver) {
+        r.receiver = { ...r.receiver, ...updates };
+      }
+    }
+    for (const opp of inMemoryOpportunities) {
+      if (opp.author_id === userId && opp.author) {
+        opp.author = { ...opp.author, ...updates };
+      }
+    }
+
     return { success: true };
   },
 
@@ -914,5 +1055,77 @@ export const platformService = {
       }
     }
     return inMemoryAuditLogs;
+  },
+
+  // --- COMMUNITY GROUPS ---
+  async getGroups(filter?: { category?: string; query?: string; memberId?: string }): Promise<CommunityGroup[]> {
+    let list = getStoredGroups();
+    if (filter?.category && filter.category !== 'all') {
+      list = list.filter(g => g.category === filter.category);
+    }
+    if (filter?.memberId) {
+      list = list.filter(g => g.member_ids.includes(filter.memberId!));
+    }
+    if (filter?.query) {
+      const q = filter.query.toLowerCase();
+      list = list.filter(g => g.name.toLowerCase().includes(q) || g.description.toLowerCase().includes(q));
+    }
+    return list;
+  },
+
+  async createGroup(data: {
+    name: string;
+    description: string;
+    category: GroupCategory;
+    creator_id: string;
+    creator_role: UserRole;
+    study_program?: string;
+    max_members?: number;
+    creator?: Profile;
+  }): Promise<{ success: boolean; group?: CommunityGroup; error?: string }> {
+    if (!data.name.trim()) return { success: false, error: 'Nama grup tidak boleh kosong' };
+    
+    const newGroup: CommunityGroup = {
+      id: `grp-${Date.now()}`,
+      name: data.name.trim(),
+      description: data.description.trim(),
+      category: data.category,
+      creator_id: data.creator_id,
+      creator_role: data.creator_role,
+      study_program: data.study_program || 'Sistem Informasi',
+      max_members: data.max_members || 100,
+      members_count: 1,
+      member_ids: [data.creator_id],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      creator: data.creator
+    };
+
+    saveStoredGroup(newGroup);
+    return { success: true, group: newGroup };
+  },
+
+  async toggleJoinGroup(groupId: string, userId: string): Promise<{ success: boolean; isMember: boolean }> {
+    const list = getStoredGroups();
+    const idx = list.findIndex(g => g.id === groupId);
+    if (idx === -1) return { success: false, isMember: false };
+
+    const grp = list[idx];
+    const isAlreadyMember = grp.member_ids.includes(userId);
+
+    if (isAlreadyMember) {
+      grp.member_ids = grp.member_ids.filter(id => id !== userId);
+      grp.members_count = Math.max(1, grp.members_count - 1);
+    } else {
+      grp.member_ids.push(userId);
+      grp.members_count += 1;
+    }
+
+    grp.updated_at = new Date().toISOString();
+    list[idx] = grp;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(GROUPS_STORAGE_KEY, JSON.stringify(list));
+    }
+    return { success: true, isMember: !isAlreadyMember };
   }
 };

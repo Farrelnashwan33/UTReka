@@ -220,7 +220,7 @@
       alt="Gerbang Ikonik Universitas Terbuka" 
       class="w-full h-full object-cover object-center opacity-75 mix-blend-overlay" 
     />
-    <div class="absolute inset-0 bg-gradient-to-t from-[#1E40AF] via-[#1E40AF]/60 to-transparent"></div>
+    <div class="absolute inset-0 bg-linear-to-t from-[#1E40AF] via-[#1E40AF]/60 to-transparent"></div>
 
     <div class="absolute bottom-16 left-16 right-16 text-white space-y-4">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 text-[#FEF08A] text-xs font-bold uppercase tracking-wider backdrop-blur-xs">
